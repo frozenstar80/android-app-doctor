@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <!--
+            Dashboard host. Declared by the library so consumers do not need any
+            manifest changes. Not exported: it can only be launched from within
+            the host application (by the floating trigger).
+        -->
+        <activity
+            android:name="com.appdoctor.ui.dashboard.DashboardActivity"
+            android:exported="false"
+            android:label="AppDoctor"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|density|uiMode"
+            android:theme="@style/Theme.AppDoctor.Dashboard" />
+
+    </application>
+
+</manifest>

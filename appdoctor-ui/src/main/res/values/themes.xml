@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Host window theme for the Compose dashboard. Uses a platform theme so the
+        library pulls in no AppCompat/Material dependency; all real theming is done
+        in Compose (see AppDoctorTheme).
+    -->
+    <style name="Theme.AppDoctor.Dashboard" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>
