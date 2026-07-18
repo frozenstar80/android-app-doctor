@@ -54,6 +54,7 @@ dependencies {
     //    release there is no overlay code at all, and core is a runtime no-op anyway.
     implementation(project(":appdoctor-core"))
     debugImplementation(project(":appdoctor-ui"))
+    debugImplementation(project(":appdoctor-network"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

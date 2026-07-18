@@ -95,6 +95,7 @@ internal class AppDoctorEngine(
     fun start() {
         application.registerActivityLifecycleCallbacks(activityTracker)
         config.plugins.forEach(::registerPlugin)
+        loadBuiltinPlugins().forEach(::registerPlugin)
         if (config.startEnabled) enable()
         Logger.i("Installed (overlay=${overlay != null}, startEnabled=${config.startEnabled}).")
     }
@@ -118,10 +119,13 @@ internal class AppDoctorEngine(
     }
 
     fun registerPlugin(plugin: AppDoctorPlugin) {
-        if (!plugins.addIfAbsent(plugin)) return
+        if (plugins.any { it.id == plugin.id }) return
+        plugins.add(plugin)
         runPluginCallback { plugin.onInstall(pluginContext) }
         if (isEnabled) runPluginCallback { plugin.onEnable() }
     }
+
+    fun pluginsSnapshot(): List<AppDoctorPlugin> = plugins.toList()
 
     /** Tear everything down. Reserved for a future public `uninstall()`. */
     fun shutdown() {
@@ -173,7 +177,28 @@ internal class AppDoctorEngine(
         null
     }
 
+    private fun loadBuiltinPlugins(): List<AppDoctorPlugin> {
+        if (!config.captureNetwork) return emptyList()
+        return listOfNotNull(loadBuiltinPlugin(BUILTIN_NETWORK_PLUGIN_CLASS))
+    }
+
+    private fun loadBuiltinPlugin(className: String): AppDoctorPlugin? = try {
+        val clazz = Class.forName(className)
+        val plugin = try {
+            clazz.getDeclaredConstructor(AppDoctorConfig::class.java).newInstance(config)
+        } catch (_: NoSuchMethodException) {
+            clazz.getDeclaredConstructor().newInstance()
+        }
+        plugin as AppDoctorPlugin
+    } catch (_: ClassNotFoundException) {
+        null
+    } catch (t: Throwable) {
+        Logger.w("Failed to load built-in plugin: $className", t)
+        null
+    }
+
     private companion object {
         private const val DEFAULT_UI_FACTORY_CLASS = "com.appdoctor.ui.ComposeOverlayFactory"
+        private const val BUILTIN_NETWORK_PLUGIN_CLASS = "com.appdoctor.network.AppDoctorNetworkPlugin"
     }
 }

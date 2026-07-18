@@ -106,6 +106,23 @@ public object AppDoctor {
     }
 
     /**
+     * Snapshot of currently registered plugins.
+     *
+     * Returns an empty list when AppDoctor is not installed.
+     */
+    @get:AnyThread
+    @get:JvmStatic
+    public val plugins: List<AppDoctorPlugin>
+        get() = engine?.pluginsSnapshot().orEmpty()
+
+    /**
+     * Returns a registered plugin by its stable [AppDoctorPlugin.id], or `null` if missing.
+     */
+    @AnyThread
+    @JvmStatic
+    public fun plugin(id: String): AppDoctorPlugin? = plugins.firstOrNull { it.id == id }
+
+    /**
      * Live metrics, or `null` if AppDoctor is not active in this build. The UI layer and
      * plugins read diagnostics through this.
      */

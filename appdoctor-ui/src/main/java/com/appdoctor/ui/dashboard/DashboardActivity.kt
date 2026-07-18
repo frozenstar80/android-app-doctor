@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.appdoctor.core.AppDoctor
+import com.appdoctor.ui.dashboard.plugin.DashboardTabPlugin
 import com.appdoctor.ui.theme.AppDoctorTheme
 
 /**
@@ -32,12 +33,13 @@ public class DashboardActivity : ComponentActivity() {
         }
 
         enableEdgeToEdge()
+        val plugins = AppDoctor.plugins.filterIsInstance<DashboardTabPlugin>()
         setContent {
             AppDoctorTheme {
                 val vm: DashboardViewModel = viewModel(
                     factory = DashboardViewModel.factory(metrics),
                 )
-                DashboardScreen(viewModel = vm, onClose = ::finish)
+                DashboardScreen(viewModel = vm, tabPlugins = plugins, onClose = ::finish)
             }
         }
     }

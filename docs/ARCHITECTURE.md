@@ -23,23 +23,23 @@ are, and where future features plug in. It complements the high‑level overview
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ sample-app  (com.android.application)                              │
-│   SampleApplication → AppDoctor.install(this)                      │
-│   implementation(appdoctor-core) + debugImplementation(appdoctor-ui)│
-└───────────────┬───────────────────────────────┬──────────────────┘
+│ sample-app  (com.android.application)                                 │
+│   SampleApplication → AppDoctor.install(this)                         │
+│   implementation(appdoctor-core) + debugImplementation(ui/network)    │
+└───────────────┬───────────────────────────────┬──────────────────────┘
                 │ (all variants)                 │ (debug only)
                 ▼                                 ▼
-┌───────────────────────────────┐   ┌──────────────────────────────┐
-│ appdoctor-core  (library)     │   │ appdoctor-ui  (library, Compose)│
-│  • AppDoctor (facade)         │   │  • ComposeOverlayFactory       │
-│  • AppDoctorEngine            │◀──┤  • FloatingButtonOverlay       │
-│  • ActivityTracker            │   │  • DashboardActivity/VM/Screen │
-│  • OverlayCoordinator         │   │  • theme / components / format │
-│  • Monitors (mem/cpu/fps)     │   │                                │
-│  • MetricsProvider            │──▶│  (reads metrics)               │
-│  • Ports + Plugin SPI         │   │  implements the core ports     │
-│  NO Compose, NO UI            │   │  api(appdoctor-core)           │
-└───────────────────────────────┘   └──────────────────────────────┘
+┌───────────────────────────────┐   ┌────────────────────────────────────┐
+│ appdoctor-core  (library)     │   │ appdoctor-ui / appdoctor-network   │
+│  • AppDoctor (facade)         │   │  • Compose overlay + dashboard      │
+│  • AppDoctorEngine            │◀──┤  • Network tab plugin + interceptor │
+│  • ActivityTracker            │   │  • Material3 plugin tab rendering   │
+│  • OverlayCoordinator         │   │                                      │
+│  • Monitors (mem/cpu/fps)     │   │                                      │
+│  • MetricsProvider            │──▶│  (reads metrics & plugin data)      │
+│  • Ports + Plugin SPI         │   │                                      │
+│  NO Compose, NO UI            │   │                                      │
+└───────────────────────────────┘   └────────────────────────────────────┘
 ```
 
 - **`appdoctor-core`** compiles with `explicitApi()` and depends only on `kotlinx‑coroutines`
@@ -176,8 +176,7 @@ Plugins are registered via `AppDoctorConfig.plugins` or `AppDoctor.registerPlugi
 faulty plugin can't crash the host. This single seam is how the roadmap items land without
 modifying core:
 
-- 🌐 **Network Inspector** — a plugin that hooks the app's HTTP client and exposes a flow of
-  transactions; the UI adds a "Network" tab.
+- 🌐 **Network Inspector** — delivered in `appdoctor-network` (OkHttp interceptor + Network tab).
 - 🗄️ **Room Inspector** — a plugin that opens the app's databases read‑only for browsing.
 - 🧬 **Compose Inspector** — a plugin surfacing recomposition counts.
 - 🧩 **Plugin System** — third‑party plugins discovered via the same SPI (and, later,
@@ -210,6 +209,14 @@ appdoctor-ui/…/com/appdoctor/ui/
 ├── overlay/FloatingButtonOverlay.kt
 ├── dashboard/                   DashboardActivity, DashboardViewModel, DashboardScreen
 │   └── components/              SectionCard, InfoRow, MetricBar
+│   └── plugin/                  DashboardTabPlugin
 ├── theme/                       AppDoctorTheme, AppDoctorTokens
 └── format/                      Formatters
+
+appdoctor-network/…/com/appdoctor/network/
+├── AppDoctorNetworkPlugin.kt    plugin + tab registration surface
+├── okhttp/                      AppDoctorNetworkInterceptor
+├── repository/                  bounded in-memory request store
+├── model/                       immutable network transaction models
+└── ui/                          NetworkTabScreen (filters/details/actions)
 ```

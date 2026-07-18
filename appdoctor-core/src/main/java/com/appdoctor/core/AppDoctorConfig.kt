@@ -20,6 +20,14 @@ import com.appdoctor.core.plugin.AppDoctorPlugin
  * @property overlayFactory optional custom [OverlayFactory] (Dependency Injection). When
  *   `null`, AppDoctor reflectively loads the `appdoctor-ui` overlay if present.
  * @property plugins plugins to register during install; see [AppDoctorPlugin].
+ * @property captureNetwork enables automatic installation of built-in network inspection
+ *   plugins found on the classpath (currently `appdoctor-network`).
+ * @property captureRequestBody whether request bodies should be captured by network
+ *   inspectors.
+ * @property captureResponseBody whether response bodies should be captured by network
+ *   inspectors.
+ * @property maxCapturedBodyBytes max bytes captured per request/response body.
+ * @property maxRequests max requests retained in-memory by built-in network inspectors.
  */
 public data class AppDoctorConfig(
     public val startEnabled: Boolean = true,
@@ -27,9 +35,18 @@ public data class AppDoctorConfig(
     public val pollingIntervalMillis: Long = DEFAULT_POLLING_INTERVAL_MS,
     public val overlayFactory: OverlayFactory? = null,
     public val plugins: List<AppDoctorPlugin> = emptyList(),
+    public val captureNetwork: Boolean = true,
+    public val captureRequestBody: Boolean = true,
+    public val captureResponseBody: Boolean = true,
+    public val maxCapturedBodyBytes: Long = DEFAULT_MAX_CAPTURED_BODY_BYTES,
+    public val maxRequests: Int = DEFAULT_MAX_REQUESTS,
 ) {
     public companion object {
         /** Default sample interval (1s) for memory & CPU monitors. */
         public const val DEFAULT_POLLING_INTERVAL_MS: Long = 1_000L
+        /** Default per-body capture cap (256 KiB). */
+        public const val DEFAULT_MAX_CAPTURED_BODY_BYTES: Long = 262_144L
+        /** Default number of retained network requests. */
+        public const val DEFAULT_MAX_REQUESTS: Int = 100
     }
 }
