@@ -7,8 +7,12 @@ import com.appdoctor.core.info.AppInfo
 import com.appdoctor.core.info.AppInfoProvider
 import com.appdoctor.core.info.DeviceInfo
 import com.appdoctor.core.info.DeviceInfoProvider
+import com.appdoctor.core.internal.collector.DefaultCollectorRegistry
+import com.appdoctor.core.internal.collector.MonitorCollector
 import com.appdoctor.core.internal.lifecycle.ActivityTracker
 import com.appdoctor.core.internal.util.Logger
+import com.appdoctor.core.metric.CollectorRegistry
+import com.appdoctor.core.metric.MetricCollectorProvider
 import com.appdoctor.core.monitor.cpu.CpuInfo
 import com.appdoctor.core.monitor.cpu.CpuMonitor
 import com.appdoctor.core.monitor.fps.FpsInfo
@@ -18,12 +22,14 @@ import com.appdoctor.core.monitor.memory.MemoryMonitor
 import com.appdoctor.core.overlay.AppDoctorOverlay
 import com.appdoctor.core.overlay.OverlayFactory
 import com.appdoctor.core.plugin.AppDoctorPlugin
+import com.appdoctor.core.plugin.AppDoctorPluginFactory
 import com.appdoctor.core.plugin.PluginContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import java.util.ServiceLoader
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
@@ -83,6 +89,11 @@ internal class AppDoctorEngine(
 
     private val plugins = CopyOnWriteArrayList<AppDoctorPlugin>()
 
+    private val collectorRegistry = DefaultCollectorRegistry()
+
+    /** Read-only registry of all metric collectors (core monitors + plugin-provided). */
+    val collectors: CollectorRegistry get() = collectorRegistry
+
     private val pluginContext: PluginContext = object : PluginContext {
         override val application: Application get() = this@AppDoctorEngine.application
         override val metrics: MetricsProvider get() = this@AppDoctorEngine
@@ -94,6 +105,7 @@ internal class AppDoctorEngine(
     /** Registers lifecycle callbacks, installs configured plugins and applies start state. */
     fun start() {
         application.registerActivityLifecycleCallbacks(activityTracker)
+        registerCoreCollectors()
         config.plugins.forEach(::registerPlugin)
         loadBuiltinPlugins().forEach(::registerPlugin)
         if (config.startEnabled) enable()
@@ -122,6 +134,9 @@ internal class AppDoctorEngine(
         if (plugins.any { it.id == plugin.id }) return
         plugins.add(plugin)
         runPluginCallback { plugin.onInstall(pluginContext) }
+        if (plugin is MetricCollectorProvider) {
+            runPluginCallback { plugin.collectors.forEach(collectorRegistry::register) }
+        }
         if (isEnabled) runPluginCallback { plugin.onEnable() }
     }
 
@@ -131,11 +146,18 @@ internal class AppDoctorEngine(
     fun shutdown() {
         application.unregisterActivityLifecycleCallbacks(activityTracker)
         mainScope.launch { coordinator.shutdown() }
+        collectorRegistry.clear()
         engineScope.cancel()
         mainScope.cancel()
     }
 
     // ---- Internals -----------------------------------------------------------------
+
+    private fun registerCoreCollectors() {
+        collectorRegistry.register(MonitorCollector(MEMORY_ID, memoryMonitor))
+        collectorRegistry.register(MonitorCollector(CPU_ID, cpuMonitor))
+        collectorRegistry.register(MonitorCollector(FPS_ID, fpsMonitor))
+    }
 
     private fun reconcileOverlay(enabled: Boolean) {
         // Overlay/WindowManager work must happen on the main thread.
@@ -167,38 +189,33 @@ internal class AppDoctorEngine(
     }
 
     private fun loadDefaultOverlayFactory(): OverlayFactory? = try {
-        val clazz = Class.forName(DEFAULT_UI_FACTORY_CLASS)
-        clazz.getDeclaredConstructor().newInstance() as OverlayFactory
-    } catch (_: ClassNotFoundException) {
-        Logger.i("appdoctor-ui not on classpath; running headless.")
-        null
+        ServiceLoader.load(OverlayFactory::class.java, OverlayFactory::class.java.classLoader)
+            .firstOrNull()
+            .also { if (it == null) Logger.i("No overlay factory on classpath; running headless.") }
     } catch (t: Throwable) {
         Logger.w("Failed to load default overlay factory.", t)
         null
     }
 
-    private fun loadBuiltinPlugins(): List<AppDoctorPlugin> {
-        if (!config.captureNetwork) return emptyList()
-        return listOfNotNull(loadBuiltinPlugin(BUILTIN_NETWORK_PLUGIN_CLASS))
+    private fun loadBuiltinPlugins(): List<AppDoctorPlugin> = try {
+        ServiceLoader.load(AppDoctorPluginFactory::class.java, AppDoctorPluginFactory::class.java.classLoader)
+            .toList()
+            .mapNotNull(::createBuiltinPlugin)
+    } catch (t: Throwable) {
+        Logger.w("Built-in plugin discovery failed.", t)
+        emptyList()
     }
 
-    private fun loadBuiltinPlugin(className: String): AppDoctorPlugin? = try {
-        val clazz = Class.forName(className)
-        val plugin = try {
-            clazz.getDeclaredConstructor(AppDoctorConfig::class.java).newInstance(config)
-        } catch (_: NoSuchMethodException) {
-            clazz.getDeclaredConstructor().newInstance()
-        }
-        plugin as AppDoctorPlugin
-    } catch (_: ClassNotFoundException) {
-        null
+    private fun createBuiltinPlugin(factory: AppDoctorPluginFactory): AppDoctorPlugin? = try {
+        factory.create(config)
     } catch (t: Throwable) {
-        Logger.w("Failed to load built-in plugin: $className", t)
+        Logger.w("Failed to create built-in plugin from ${factory::class.java.name}.", t)
         null
     }
 
     private companion object {
-        private const val DEFAULT_UI_FACTORY_CLASS = "com.appdoctor.ui.ComposeOverlayFactory"
-        private const val BUILTIN_NETWORK_PLUGIN_CLASS = "com.appdoctor.network.AppDoctorNetworkPlugin"
+        private const val MEMORY_ID = "memory"
+        private const val CPU_ID = "cpu"
+        private const val FPS_ID = "fps"
     }
 }

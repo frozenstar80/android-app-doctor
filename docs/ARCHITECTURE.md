@@ -25,22 +25,25 @@ are, and where future features plug in. It complements the high‑level overview
 ┌──────────────────────────────────────────────────────────────────┐
 │ sample-app  (com.android.application)                                 │
 │   SampleApplication → AppDoctor.install(this)                         │
-│   implementation(appdoctor-core) + debugImplementation(ui/network)    │
+│   implementation(appdoctor-core) + debugImplementation(ui/net/db)     │
 └───────────────┬───────────────────────────────┬──────────────────────┘
                 │ (all variants)                 │ (debug only)
                 ▼                                 ▼
 ┌───────────────────────────────┐   ┌────────────────────────────────────┐
-│ appdoctor-core  (library)     │   │ appdoctor-ui / appdoctor-network   │
+│ appdoctor-core  (library)     │   │ appdoctor-ui / -network / -database │
 │  • AppDoctor (facade)         │   │  • Compose overlay + dashboard      │
 │  • AppDoctorEngine            │◀──┤  • Network tab plugin + interceptor │
-│  • ActivityTracker            │   │  • Material3 plugin tab rendering   │
-│  • OverlayCoordinator         │   │                                      │
+│  • ActivityTracker            │   │  • Database tab plugin + SQLite wrap │
+│  • OverlayCoordinator         │   │  • Material3 plugin tab rendering   │
 │  • Monitors (mem/cpu/fps)     │   │                                      │
 │  • MetricsProvider            │──▶│  (reads metrics & plugin data)      │
 │  • Ports + Plugin SPI         │   │                                      │
 │  NO Compose, NO UI            │   │                                      │
 └───────────────────────────────┘   └────────────────────────────────────┘
 ```
+
+Both `appdoctor-network` and `appdoctor-database` are debug-only collector modules
+discovered via `ServiceLoader`; neither requires any `appdoctor-core` change.
 
 - **`appdoctor-core`** compiles with `explicitApi()` and depends only on `kotlinx‑coroutines`
   and `androidx.core`. It never references Compose or any concrete UI.
@@ -177,13 +180,50 @@ faulty plugin can't crash the host. This single seam is how the roadmap items la
 modifying core:
 
 - 🌐 **Network Inspector** — delivered in `appdoctor-network` (OkHttp interceptor + Network tab).
-- 🗄️ **Room Inspector** — a plugin that opens the app's databases read‑only for browsing.
+- 🗄️ **Database Inspector** — delivered in `appdoctor-database`: runtime SQL metrics via a
+  delegating `SupportSQLiteOpenHelper.Factory` (Room `enableAppDoctor()`), a bounded query
+  store, an optional decoupled analytics engine, and a Database tab.
 - 🧬 **Compose Inspector** — a plugin surfacing recomposition counts.
 - 🧩 **Plugin System** — third‑party plugins discovered via the same SPI (and, later,
   `ServiceLoader`/manifest metadata) so they need no core changes at all.
 
 The dashboard is intentionally sectioned so a future `PluginSection` can render each
 registered plugin's `title` + content with no structural change.
+
+---
+
+## 7a. Collector infrastructure (metrics platform)
+
+Every runtime metric is exposed through a small, UI-free contract in `appdoctor-core`:
+
+```kotlin
+interface Metric                                   // marker; MemoryInfo/CpuInfo/FpsInfo implement it
+interface MetricCollector<out T : Metric> {        // id + live StateFlow + snapshot()
+    val id: String
+    val data: StateFlow<T>
+    fun snapshot(): T = data.value
+}
+interface CollectorRegistry {                       // read-only: enumerate + lookup by id
+    val collectors: List<MetricCollector<Metric>>
+    fun collector(id: String): MetricCollector<Metric>?
+}
+```
+
+- Existing monitors are **adapted** (not rewritten) via the internal `MonitorCollector`,
+  which re-exposes the monitor's own hot `StateFlow` verbatim (zero extra sampling).
+- Plugins contribute collectors by implementing the optional `MetricCollectorProvider`;
+  `AppDoctorEngine` registers them automatically on install (Interface Segregation — a
+  tab-only plugin need not implement it).
+- Access the read-only registry via `AppDoctor.collectors`. Stable ids: `memory`, `cpu`,
+  `fps`, `network`, `database`.
+- Discovery is `java.util.ServiceLoader`-based: modules self-register an `OverlayFactory`
+  and/or an `AppDoctorPluginFactory` under `META-INF/services`, so core needs **no edits**
+  when a new collector module (the Phase 3 Database module, a future Compose module) is
+  added. AGP merges the per-module service files, so multiple inspector modules coexist.
+
+`StateFlow` remains the primary live stream; `snapshot()` is the point-in-time read for
+future Timeline / Session Reports / Diagnostics. No Diagnostics/AI/rule types are introduced
+here — this is only the collector substrate.
 
 ---
 
@@ -219,4 +259,16 @@ appdoctor-network/…/com/appdoctor/network/
 ├── repository/                  bounded in-memory request store
 ├── model/                       immutable network transaction models
 └── ui/                          NetworkTabScreen (filters/details/actions)
+
+appdoctor-database/…/com/appdoctor/database/
+├── AppDoctorDatabasePlugin.kt   plugin + tab registration surface
+├── AppDoctorDatabase.kt         global recorder sink + factory wrapper
+├── RoomDatabaseExtensions.kt    RoomDatabase.Builder.enableAppDoctor()
+├── internal/sqlite/             SupportSQLite Proxy + statement/cursor wrappers, txn tracker
+├── recorder/                    QueryExecution → DatabaseQueryRecorder → repository
+├── repository/                  bounded in-memory query store
+├── metric/                      DatabaseMetricCollector (adapter, no analytics)
+├── analytics/                   pure Computer + live Engine (optional, decoupled)
+├── model/                       DatabaseQuery, QueryType, DatabaseMetric
+└── ui/                          DatabaseTabScreen + analytics section
 ```

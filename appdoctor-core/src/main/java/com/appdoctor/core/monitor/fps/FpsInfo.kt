@@ -1,5 +1,7 @@
 package com.appdoctor.core.monitor.fps
 
+import com.appdoctor.core.metric.Metric
+
 /**
  * Immutable snapshot of frame-rate statistics.
  *
@@ -12,7 +14,7 @@ public data class FpsInfo(
     public val average: Float,
     /** Lowest instantaneous FPS observed since collection started (worst jank). */
     public val lowest: Float,
-) {
+) : Metric {
     public companion object {
         /** Zeroed placeholder used as the initial value before the first frame. */
         public val Empty: FpsInfo = FpsInfo(

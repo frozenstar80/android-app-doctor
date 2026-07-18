@@ -8,3 +8,7 @@
 -keep class com.appdoctor.core.AppDoctor { public *; }
 -keep class com.appdoctor.core.overlay.OverlayFactory { *; }
 -keep class * implements com.appdoctor.core.overlay.OverlayFactory { <init>(); }
+
+# Built-in plugins are discovered via java.util.ServiceLoader through a factory SPI.
+-keep class com.appdoctor.core.plugin.AppDoctorPluginFactory { *; }
+-keep class * implements com.appdoctor.core.plugin.AppDoctorPluginFactory { <init>(); }

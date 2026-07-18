@@ -1,7 +1,7 @@
 # 🩺 AppDoctor
 
 **A zero‑config, debug‑only diagnostics overlay for Android.**
-One line in your `Application` gives you a draggable floating button on every screen that opens a live dashboard of **device info, app info, memory, FPS, CPU and network requests** — and it compiles to **nothing** in release builds.
+One line in your `Application` gives you a draggable floating button on every screen that opens a live dashboard of **device info, app info, memory, FPS, CPU, network requests and database queries** — and it compiles to **nothing** in release builds.
 
 ```kotlin
 class MyApp : Application() {
@@ -12,7 +12,7 @@ class MyApp : Application() {
 }
 ```
 
-> Phase 2 in progress. Built with Kotlin, Jetpack Compose and Clean Architecture.
+> Phase 3 complete. Built with Kotlin, Jetpack Compose and Clean Architecture.
 
 ---
 
@@ -28,6 +28,7 @@ class MyApp : Application() {
 | 🎞️ | **FPS monitor** | Current, average and lowest FPS, updated live via `Choreographer`. |
 | ⚙️ | **CPU monitor** | Approximate process CPU %, sampled from `/proc/self/stat` every second. |
 | 🌐 | **Network Inspector** | OkHttp interceptor + dashboard tab with search/filter/sort, headers/body/timing details, copy/share/export actions. |
+| 🗄️ | **Database Inspector** | Runtime SQL metrics for Room/SQLite: query, type, duration, rows, success, thread, transaction — plus optional analytics. Dashboard tab with search/filter/sort + copy/export. |
 | 🔌 | **Programmatic control** | `enable()`, `disable()`, `isEnabled()`. |
 | 🚫 | **Release‑safe** | Complete **no‑op** in non‑debuggable builds — no lifecycle callbacks, monitors, or overlay are ever created. |
 
@@ -89,6 +90,7 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and the ful
 | **`appdoctor-core`** | Android library | Public API, engine, lifecycle, monitors, ports, plugin SPI. | ❌ |
 | **`appdoctor-ui`** | Android library | Floating button overlay + Compose dashboard. Implements the core ports. | ✅ |
 | **`appdoctor-network`** | Android library | OkHttp interception, bounded request store, and Network dashboard tab plugin. | ✅ |
+| **`appdoctor-database`** | Android library | SupportSQLite/Room query instrumentation, bounded query store, optional analytics, and Database dashboard tab plugin. | ✅ |
 | **`sample-app`** | Android app | Demonstrates the one‑line integration. | ✅ |
 
 ---
@@ -102,6 +104,7 @@ dependencies {
     implementation(project(":appdoctor-core"))     // small; no‑op in release
     debugImplementation(project(":appdoctor-ui"))  // Compose overlay, debug builds only
     debugImplementation(project(":appdoctor-network")) // Network inspector plugin + UI tab
+    debugImplementation(project(":appdoctor-database")) // Database inspector plugin + UI tab
 }
 ```
 
@@ -140,6 +143,21 @@ val client = OkHttpClient.Builder().apply {
 }.build()
 ```
 
+### Database inspection (Room)
+
+`appdoctor-database` auto-registers `AppDoctorDatabasePlugin` when present on the classpath (unless `captureDatabase = false`).  
+Enable it on your Room builder:
+
+```kotlin
+import com.appdoctor.database.enableAppDoctor
+
+val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+    .enableAppDoctor()
+    .build()
+```
+
+Opt into runtime analytics with `AppDoctorConfig(enableDatabaseAnalytics = true)`. See [`docs/DATABASE.md`](docs/DATABASE.md).
+
 ### Configuration (optional)
 
 ```kotlin
@@ -153,6 +171,10 @@ AppDoctor.install(
         captureResponseBody = true,
         maxCapturedBodyBytes = 262_144,
         maxRequests = 100,
+        captureDatabase = true,          // install the database inspector
+        maxDatabaseQueries = 100,        // bounded query history
+        slowQueryThresholdMillis = 16L,  // "slow" query threshold (≈ one frame)
+        enableDatabaseAnalytics = false, // opt in to runtime analytics
     ),
 )
 ```
@@ -216,7 +238,6 @@ AppDoctor.registerPlugin(NetworkInspectorPlugin())
 
 Planned extension points on the roadmap:
 
-- 🗄️ **Room Inspector** — inspect and query the local database.
 - 🧬 **Compose Inspector** — recomposition counts and layout insights.
 - 🧩 **Plugin System** — third‑party tabs discovered via the same SPI.
 
@@ -253,9 +274,10 @@ The [`sample-app`](sample-app) module demonstrates the full integration:
 ## 🗺️ Roadmap
 
 - [x] **Phase 1 — MVP:** floating button, dashboard, device/app/memory/FPS/CPU, plugin SPI.
-- [~] **Phase 2:** Network Inspector ✅, Room Inspector ⏳.
-- [ ] **Phase 3:** Compose Inspector, crash/ANR capture, log viewer.
-- [ ] **Phase 4:** public plugin system + Maven Central publishing.
+- [x] **Phase 2:** Network Inspector ✅.
+- [x] **Phase 3:** Database (Room) runtime inspector ✅ — SQL metrics + optional analytics.
+- [ ] **Phase 4:** Compose Inspector, crash/ANR capture, log viewer.
+- [ ] **Phase 5:** public plugin system + Maven Central publishing.
 
 ---
 

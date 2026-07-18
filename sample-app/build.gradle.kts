@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":appdoctor-core"))
     debugImplementation(project(":appdoctor-ui"))
     debugImplementation(project(":appdoctor-network"))
+    debugImplementation(project(":appdoctor-database"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

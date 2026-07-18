@@ -4,7 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.appdoctor.core.AppDoctor
 import com.appdoctor.core.AppDoctorConfig
+import com.appdoctor.core.metric.Metric
+import com.appdoctor.core.metric.MetricCollector
+import com.appdoctor.core.metric.MetricCollectorProvider
 import com.appdoctor.core.plugin.PluginContext
+import com.appdoctor.network.metric.NetworkMetricCollector
 import com.appdoctor.network.model.NetworkRequestRecord
 import com.appdoctor.network.okhttp.AppDoctorNetworkInterceptor
 import com.appdoctor.network.repository.InMemoryNetworkRequestRepository
@@ -22,7 +26,7 @@ import java.util.concurrent.atomic.AtomicLong
  */
 public class AppDoctorNetworkPlugin(
     private val config: AppDoctorConfig = AppDoctorConfig(),
-) : DashboardTabPlugin {
+) : DashboardTabPlugin, MetricCollectorProvider {
 
     private val captureEnabled = AtomicBoolean(false)
     private val requestId = AtomicLong(0L)
@@ -35,10 +39,19 @@ public class AppDoctorNetworkPlugin(
     override val tabKey: String = "network"
     override val tabTitle: String = "Network"
 
+    @Volatile
+    private var metricCollector: NetworkMetricCollector? = null
+
     /** Read-only latest-first list of captured requests. */
     public val requests: StateFlow<List<NetworkRequestRecord>> get() = repository.requests
 
-    override fun onInstall(context: PluginContext): Unit = Unit
+    /** Collectors this plugin contributes to the [com.appdoctor.core.metric.CollectorRegistry]. */
+    override val collectors: List<MetricCollector<Metric>>
+        get() = listOfNotNull(metricCollector)
+
+    override fun onInstall(context: PluginContext) {
+        metricCollector = NetworkMetricCollector(repository, context.scope)
+    }
 
     override fun onEnable(): Unit {
         captureEnabled.set(true)

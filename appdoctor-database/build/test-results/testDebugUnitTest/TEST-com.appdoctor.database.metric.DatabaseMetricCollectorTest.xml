@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.appdoctor.database.metric.DatabaseMetricCollectorTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-18T18:44:03.527Z" hostname="Mac.lan" time="0.045">
+  <properties/>
+  <testcase name="snapshot reflects live repository and has stable id" classname="com.appdoctor.database.metric.DatabaseMetricCollectorTest" time="0.045"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

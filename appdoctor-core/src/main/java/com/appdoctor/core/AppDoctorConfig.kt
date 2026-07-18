@@ -28,6 +28,14 @@ import com.appdoctor.core.plugin.AppDoctorPlugin
  *   inspectors.
  * @property maxCapturedBodyBytes max bytes captured per request/response body.
  * @property maxRequests max requests retained in-memory by built-in network inspectors.
+ * @property captureDatabase enables automatic installation of built-in database inspection
+ *   plugins found on the classpath (currently `appdoctor-database`).
+ * @property maxDatabaseQueries max SQL queries retained in-memory by the database inspector.
+ * @property slowQueryThresholdMillis a query at or above this duration (ms) is flagged as
+ *   "slow" by database analytics. Defaults to the ~16ms frame budget.
+ * @property enableDatabaseAnalytics whether the database inspector continuously computes
+ *   aggregated runtime statistics. Off by default — when disabled only query history is
+ *   collected.
  */
 public data class AppDoctorConfig(
     public val startEnabled: Boolean = true,
@@ -40,6 +48,10 @@ public data class AppDoctorConfig(
     public val captureResponseBody: Boolean = true,
     public val maxCapturedBodyBytes: Long = DEFAULT_MAX_CAPTURED_BODY_BYTES,
     public val maxRequests: Int = DEFAULT_MAX_REQUESTS,
+    public val captureDatabase: Boolean = true,
+    public val maxDatabaseQueries: Int = DEFAULT_MAX_DATABASE_QUERIES,
+    public val slowQueryThresholdMillis: Long = DEFAULT_SLOW_QUERY_THRESHOLD_MS,
+    public val enableDatabaseAnalytics: Boolean = false,
 ) {
     public companion object {
         /** Default sample interval (1s) for memory & CPU monitors. */
@@ -48,5 +60,9 @@ public data class AppDoctorConfig(
         public const val DEFAULT_MAX_CAPTURED_BODY_BYTES: Long = 262_144L
         /** Default number of retained network requests. */
         public const val DEFAULT_MAX_REQUESTS: Int = 100
+        /** Default number of retained database queries. */
+        public const val DEFAULT_MAX_DATABASE_QUERIES: Int = 100
+        /** Default slow-query threshold (~one dropped frame). */
+        public const val DEFAULT_SLOW_QUERY_THRESHOLD_MS: Long = 16L
     }
 }

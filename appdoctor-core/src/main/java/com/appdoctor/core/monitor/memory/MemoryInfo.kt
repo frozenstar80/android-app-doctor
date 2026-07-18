@@ -1,5 +1,7 @@
 package com.appdoctor.core.monitor.memory
 
+import com.appdoctor.core.metric.Metric
+
 /**
  * Immutable snapshot of JVM heap and native memory usage, in bytes.
  *
@@ -14,7 +16,7 @@ public data class MemoryInfo(
     public val freeBytes: Long,
     /** Bytes allocated on the native heap (`Debug.getNativeHeapAllocatedSize`). */
     public val nativeAllocatedBytes: Long,
-) {
+) : Metric {
     /** Heap utilisation as a percentage in `0f..100f`. */
     public val usagePercent: Float
         get() = if (maxBytes > 0L) usedBytes.toFloat() / maxBytes.toFloat() * 100f else 0f

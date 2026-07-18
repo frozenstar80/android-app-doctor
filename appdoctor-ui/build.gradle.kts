@@ -39,6 +39,8 @@ android {
 }
 
 kotlin {
+    // Public library: enforce explicit visibility & return types on the ABI (matches core/network).
+    explicitApi()
     compilerOptions {
         jvmTarget = JvmTarget.JVM_17
     }

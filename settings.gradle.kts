@@ -26,4 +26,5 @@ rootProject.name = "AppDoctor"
 include(":appdoctor-core")
 include(":appdoctor-ui")
 include(":appdoctor-network")
+include(":appdoctor-database")
 include(":sample-app")

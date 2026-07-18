@@ -1,0 +1,4 @@
+com.appdoctor.database.test.appdoctor-database-mergeDebugUnitTestResources-0 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/intermediates/incremental/debugUnitTest/mergeDebugUnitTestResources/merged.dir
+com.appdoctor.database.test.appdoctor-database-mergeDebugUnitTestResources-1 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/intermediates/incremental/debugUnitTest/mergeDebugUnitTestResources/stripped.dir
+com.appdoctor.database.test.appdoctor-database-debugUnitTest-2 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/intermediates/merged_res/debugUnitTest/mergeDebugUnitTestResources
+gradleHome-0 /Users/tanmaysingh/.gradle

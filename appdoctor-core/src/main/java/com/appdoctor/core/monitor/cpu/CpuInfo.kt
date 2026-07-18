@@ -1,5 +1,7 @@
 package com.appdoctor.core.monitor.cpu
 
+import com.appdoctor.core.metric.Metric
+
 /**
  * Immutable snapshot of the current process's approximate CPU usage.
  *
@@ -13,7 +15,7 @@ public data class CpuInfo(
     public val processCpuPercent: Float,
     /** Number of processors visible to the process. */
     public val coreCount: Int,
-) {
+) : Metric {
     public companion object {
         /** Zeroed placeholder used as the initial value before the first delta. */
         public val Empty: CpuInfo = CpuInfo(

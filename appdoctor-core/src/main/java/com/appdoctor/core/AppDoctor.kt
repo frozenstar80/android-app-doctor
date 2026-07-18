@@ -5,6 +5,7 @@ import androidx.annotation.AnyThread
 import com.appdoctor.core.internal.AppDoctorEngine
 import com.appdoctor.core.internal.util.BuildTypeDetector
 import com.appdoctor.core.internal.util.Logger
+import com.appdoctor.core.metric.CollectorRegistry
 import com.appdoctor.core.plugin.AppDoctorPlugin
 
 /**
@@ -130,6 +131,16 @@ public object AppDoctor {
     @get:JvmStatic
     public val metrics: MetricsProvider?
         get() = engine
+
+    /**
+     * Read-only registry of all metric collectors (core monitors plus any contributed by
+     * plugins), or `null` if AppDoctor is not active in this build. Intended for future
+     * Diagnostics / Timeline / Session Reports; the UI may also consume it.
+     */
+    @get:AnyThread
+    @get:JvmStatic
+    public val collectors: CollectorRegistry?
+        get() = engine?.collectors
 
     private fun shouldActivate(application: Application, config: AppDoctorConfig): Boolean =
         config.enabledInReleaseBuilds || BuildTypeDetector.isDebuggable(application)
