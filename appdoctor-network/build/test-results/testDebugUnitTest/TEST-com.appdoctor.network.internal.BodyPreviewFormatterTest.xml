@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.network.internal.BodyPreviewFormatterTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:49.876Z" hostname="Mac.lan" time="0.387">
-  <properties/>
-  <testcase name="binary is replaced with placeholder" classname="com.appdoctor.network.internal.BodyPreviewFormatterTest" time="0.11"/>
-  <testcase name="xml gets pretty printed" classname="com.appdoctor.network.internal.BodyPreviewFormatterTest" time="0.271"/>
-  <testcase name="json gets pretty printed" classname="com.appdoctor.network.internal.BodyPreviewFormatterTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

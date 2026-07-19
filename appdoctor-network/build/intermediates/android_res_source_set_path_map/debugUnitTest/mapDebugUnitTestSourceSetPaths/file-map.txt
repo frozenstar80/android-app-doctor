@@ -1,4 +1,0 @@
-com.appdoctor.network.test.appdoctor-network-mergeDebugUnitTestResources-0 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/incremental/debugUnitTest/mergeDebugUnitTestResources/merged.dir
-com.appdoctor.network.test.appdoctor-network-mergeDebugUnitTestResources-1 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/incremental/debugUnitTest/mergeDebugUnitTestResources/stripped.dir
-com.appdoctor.network.test.appdoctor-network-debugUnitTest-2 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/merged_res/debugUnitTest/mergeDebugUnitTestResources
-gradleHome-0 /Users/tanmaysingh/.gradle

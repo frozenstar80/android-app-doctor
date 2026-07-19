@@ -1,9 +1,0 @@
-com.appdoctor.database.appdoctor-database-pngs-0 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/generated/res/pngs/release
-com.appdoctor.database.appdoctor-database-updated_navigation_xml-1 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/generated/updated_navigation_xml/release
-com.appdoctor.database.appdoctor-database-mergeReleaseResources-2 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/intermediates/incremental/release/mergeReleaseResources/merged.dir
-com.appdoctor.database.appdoctor-database-mergeReleaseResources-3 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/intermediates/incremental/release/mergeReleaseResources/stripped.dir
-com.appdoctor.database.appdoctor-database-release-4 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/intermediates/merged_res/release/mergeReleaseResources
-com.appdoctor.database.appdoctor-database-release-5 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/build/intermediates/packaged_res/release/packageReleaseResources
-com.appdoctor.database.appdoctor-database-main-6 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/src/main/res
-com.appdoctor.database.appdoctor-database-release-7 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-database/src/release/res
-gradleHome-0 /Users/tanmaysingh/.gradle

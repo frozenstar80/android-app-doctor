@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.diagnostics.engine.rules.RuleTests" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:35.470Z" hostname="Mac.lan" time="0.005">
-  <properties/>
-  <testcase name="cross rule triggers when fps and database are both bad" classname="com.appdoctor.diagnostics.engine.rules.RuleTests" time="0.003"/>
-  <testcase name="network failure rule ignores healthy samples" classname="com.appdoctor.diagnostics.engine.rules.RuleTests" time="0.0"/>
-  <testcase name="sustained memory rule triggers on persistent pressure" classname="com.appdoctor.diagnostics.engine.rules.RuleTests" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

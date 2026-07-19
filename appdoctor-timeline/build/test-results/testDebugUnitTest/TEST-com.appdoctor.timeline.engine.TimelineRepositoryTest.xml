@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.timeline.engine.TimelineRepositoryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:37.777Z" hostname="Mac.lan" time="0.004">
-  <properties/>
-  <testcase name="repository is bounded and ordered newest first" classname="com.appdoctor.timeline.engine.TimelineRepositoryTest" time="0.0"/>
-  <testcase name="filters and search work" classname="com.appdoctor.timeline.engine.TimelineRepositoryTest" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

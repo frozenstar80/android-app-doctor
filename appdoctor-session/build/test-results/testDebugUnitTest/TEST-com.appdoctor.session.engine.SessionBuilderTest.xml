@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.session.engine.SessionBuilderTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:40.377Z" hostname="Mac.lan" time="0.253">
-  <properties/>
-  <testcase name="builds report from collector snapshots" classname="com.appdoctor.session.engine.SessionBuilderTest" time="0.241"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
