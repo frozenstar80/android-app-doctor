@@ -1,15 +1,36 @@
+# Android Studio / IntelliJ IDEA
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+
+# Gradle
+.gradle/
+**/build/
+
+# Android local config and outputs
 local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystore and signing files
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*~
+*.swp
+*.swo
+
+# OS-generated files (macOS / Windows)
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100
+.Trashes
