@@ -31,18 +31,21 @@ are, and where future features plug in. It complements the high‑level overview
                 ▼                                 ▼
 ┌───────────────────────────────┐   ┌────────────────────────────────────┐
 │ appdoctor-core  (library)     │   │ appdoctor-ui / -network / -database  │
-│  • AppDoctor (facade)         │   │                  / -compose          │
+│  • AppDoctor (facade)         │   │    / -compose / -diagnostics / -timeline / -session │
 │  • AppDoctorEngine            │◀──┤  • Compose overlay + dashboard      │
 │  • ActivityTracker            │   │  • Network tab plugin + interceptor │
 │  • OverlayCoordinator         │   │  • Database tab plugin + SQLite wrap │
 │  • Monitors (mem/cpu/fps)     │   │  • Compose tab plugin + runtime probes │
+│  • Diagnostics engine + Health model   │
+│  • Timeline engine + correlation/export │
 │  • MetricsProvider            │──▶│  • Material3 plugin tab rendering   │
 │  • Ports + Plugin SPI         │   │  (reads metrics & plugin data)      │
 │  NO Compose, NO UI            │   │                                      │
 └───────────────────────────────┘   └────────────────────────────────────┘
 ```
 
-The `appdoctor-network`, `appdoctor-database` and `appdoctor-compose` modules are all
+The `appdoctor-network`, `appdoctor-database`, `appdoctor-compose`,
+`appdoctor-diagnostics`, `appdoctor-timeline`, and `appdoctor-session` modules are all
 debug-only collector modules discovered via `ServiceLoader`; none requires any
 `appdoctor-core` change.
 
@@ -188,6 +191,15 @@ modifying core:
   (`Recomposer.runningRecomposers` + `Choreographer`), opt-in per-composable tracking via a
   process-wide sink, an optional decoupled analytics engine, and a Compose tab. No experimental
   Compose APIs and no reflection into Compose internals.
+- 🩺 **Diagnostics Intelligence** — delivered in `appdoctor-diagnostics`: a pure-Kotlin
+  asynchronous rule engine that reads `CollectorRegistry` snapshots, computes deterministic
+  health scores, opens/updates/resolves issues with confidence, and powers the Health tab.
+- 🕒 **Timeline Engine** — delivered in `appdoctor-timeline`: a pure observational layer
+  that asynchronously consumes collector snapshots plus diagnostics issue updates, records
+  a bounded chronological event stream, groups near-time events, and exports JSON/Markdown.
+- 🧾 **Session Reports** — delivered in `appdoctor-session`: a pure aggregation layer that
+  asynchronously samples collector snapshots, consumes optional timeline/diagnostics outputs,
+  builds session metadata + summaries, and exports local JSON/Markdown/ZIP reports.
 - 🧩 **Plugin System** — third‑party plugins discovered via the same SPI (and, later,
   `ServiceLoader`/manifest metadata) so they need no core changes at all.
 
@@ -287,4 +299,23 @@ appdoctor-compose/…/com/appdoctor/compose/
 ├── model/                       ComposeRuntimeSnapshot, TrackedComposable
 ├── internal/                    ComposeFormatter
 └── ui/                          ComposeTabScreen + analytics section + lightweight charts
+
+appdoctor-diagnostics/…/com/appdoctor/diagnostics/
+├── AppDoctorDiagnosticsPlugin.kt      plugin runtime + state flows
+├── AppDoctorDiagnosticsPluginFactory.kt ServiceLoader registration gate
+├── model/                             HealthReport + DiagnosticIssue model
+└── engine/                            DiagnosticsEngine, rules, confidence, lifecycle store
+
+appdoctor-timeline/…/com/appdoctor/timeline/
+├── AppDoctorTimelinePlugin.kt         plugin runtime + timeline API
+├── AppDoctorTimelinePluginFactory.kt  ServiceLoader registration gate
+├── model/                             TimelineEvent, TimelineSession, TimelineFilter
+└── engine/                            TimelineEngine, repository, grouping, search, exporter
+
+appdoctor-session/…/com/appdoctor/session/
+├── AppDoctorSessionPlugin.kt          plugin runtime + public manager API
+├── AppDoctorSessionPluginFactory.kt   ServiceLoader registration gate
+├── SessionManager.kt                  generate/save/share/export facade
+├── model/                             SessionReport + metadata/sections
+└── engine/                            recorder, builder, formatter, exporter, repository
 ```

@@ -97,6 +97,7 @@ internal class AppDoctorEngine(
     private val pluginContext: PluginContext = object : PluginContext {
         override val application: Application get() = this@AppDoctorEngine.application
         override val metrics: MetricsProvider get() = this@AppDoctorEngine
+        override val collectors: CollectorRegistry get() = this@AppDoctorEngine.collectors
         override val scope: CoroutineScope get() = engineScope
     }
 

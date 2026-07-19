@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.database.analytics.DatabaseAnalyticsComputerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-07-18T19:36:12.622Z" hostname="Mac.lan" time="0.112">
+<testsuite name="com.appdoctor.database.analytics.DatabaseAnalyticsComputerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-07-19T04:40:18.130Z" hostname="MacBook-Air.local" time="0.077">
   <properties/>
-  <testcase name="aggregates durations types transactions and rankings" classname="com.appdoctor.database.analytics.DatabaseAnalyticsComputerTest" time="0.095"/>
+  <testcase name="aggregates durations types transactions and rankings" classname="com.appdoctor.database.analytics.DatabaseAnalyticsComputerTest" time="0.07"/>
   <testcase name="empty input yields empty analytics" classname="com.appdoctor.database.analytics.DatabaseAnalyticsComputerTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

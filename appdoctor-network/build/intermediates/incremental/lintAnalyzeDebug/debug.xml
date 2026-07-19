@@ -8,7 +8,7 @@
     proguardFiles="build/intermediates/default_proguard_files/global/proguard-android-optimize.txt-9.2.1"
     consumerProguardFiles="consumer-rules.pro"
     partialResultsDir="build/intermediates/lint_partial_results/debug/lintAnalyzeDebug/out"
-    desugaredMethodsFiles="/Users/tanmaysingh/.gradle/caches/9.4.1/transforms/a58b1aef4d7de87390cad43745cadf1b/transformed/D8BackportedDesugaredMethods.txt">
+    desugaredMethodsFiles="/Users/tanmaysingh/.gradle/caches/9.4.1/transforms/84fc3b2781f361166f820f6d5c2c20bc/transformed/D8BackportedDesugaredMethods.txt">
   <buildFeatures/>
   <sourceProviders>
     <sourceProvider
@@ -28,6 +28,6 @@
       type="MAIN"
       applicationId="com.appdoctor.network"
       generatedSourceFolders="build/generated/ap_generated_sources/debug/out"
-      desugaredMethodsFiles="/Users/tanmaysingh/.gradle/caches/9.4.1/transforms/a58b1aef4d7de87390cad43745cadf1b/transformed/D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="/Users/tanmaysingh/.gradle/caches/9.4.1/transforms/84fc3b2781f361166f820f6d5c2c20bc/transformed/D8BackportedDesugaredMethods.txt">
   </artifact>
 </variant>

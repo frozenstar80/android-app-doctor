@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -17,13 +19,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.appdoctor.ui.dashboard.session.SessionReportsReflectionAdapter
 import com.appdoctor.core.info.AppInfo
 import com.appdoctor.core.info.DeviceInfo
 import com.appdoctor.core.monitor.cpu.CpuInfo
@@ -32,8 +38,14 @@ import com.appdoctor.core.monitor.memory.MemoryInfo
 import com.appdoctor.ui.dashboard.components.InfoRow
 import com.appdoctor.ui.dashboard.components.MetricBar
 import com.appdoctor.ui.dashboard.components.SectionCard
+import com.appdoctor.ui.dashboard.health.HealthTabScreen
 import com.appdoctor.ui.dashboard.plugin.DashboardTabPlugin
+import com.appdoctor.ui.dashboard.timeline.TimelineTabScreen
 import com.appdoctor.ui.format.Formatters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import android.widget.Toast
 
 /**
  * Root composable of the diagnostics dashboard. Reads static info directly and collects
@@ -51,6 +63,8 @@ internal fun DashboardScreen(
     val allTabs = remember(tabPlugins) {
         buildList {
             add(TabSpec("overview", "Overview", null))
+            add(TabSpec("health", "Health", null))
+            add(TabSpec("timeline", "Timeline", null))
             tabPlugins.forEach { plugin ->
                 add(TabSpec(plugin.tabKey, plugin.tabTitle, plugin))
             }
@@ -75,10 +89,22 @@ internal fun DashboardScreen(
             }
 
             val selected = allTabs[selectedTabIndex]
-            if (selected.plugin == null) {
-                OverviewTab(viewModel = viewModel)
-            } else {
-                selected.plugin.DashboardTabContent(
+            when (selected.key) {
+                "overview" -> OverviewTab(viewModel = viewModel)
+                "health" -> HealthTabScreen(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                )
+                "timeline" -> TimelineTabScreen(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    onJumpToIssue = {
+                        selectedTabIndex = allTabs.indexOfFirst { it.key == "health" }.coerceAtLeast(0)
+                    },
+                )
+                else -> selected.plugin?.DashboardTabContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp),
@@ -119,6 +145,10 @@ private data class TabSpec(
 
 @Composable
 private fun DashboardHeader(onClose: () -> Unit) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val sessionAdapter = remember { SessionReportsReflectionAdapter() }
+    var exportMenuExpanded by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -129,7 +159,39 @@ private fun DashboardHeader(onClose: () -> Unit) {
             style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
             color = MaterialTheme.colorScheme.onBackground,
         )
-        TextButton(onClick = onClose) { Text("Done") }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (sessionAdapter.isAvailable()) {
+                TextButton(onClick = { exportMenuExpanded = true }) {
+                    Text("Export Session")
+                }
+                DropdownMenu(
+                    expanded = exportMenuExpanded,
+                    onDismissRequest = { exportMenuExpanded = false },
+                ) {
+                    listOf("JSON", "MARKDOWN", "ZIP").forEach { format ->
+                        DropdownMenuItem(
+                            text = { Text("Export $format") },
+                            onClick = {
+                                exportMenuExpanded = false
+                                scope.launch {
+                                    val outDir = context.cacheDir.resolve("appdoctor-session-exports")
+                                    val result = withContext(Dispatchers.IO) {
+                                        sessionAdapter.export(format, outDir)
+                                    }
+                                    val message = if (result != null) {
+                                        "Saved ${result.name}"
+                                    } else {
+                                        "Session export failed"
+                                    }
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+            TextButton(onClick = onClose) { Text("Done") }
+        }
     }
 }
 

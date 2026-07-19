@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.appdoctor.timeline.engine.TimelineEngineTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T04:40:02.040Z" hostname="MacBook-Air.local" time="0.039">
+  <properties/>
+  <testcase name="orders events and assigns grouping ids" classname="com.appdoctor.timeline.engine.TimelineEngineTest" time="0.038"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -2,6 +2,7 @@ package com.example.appdoctor
 
 import android.app.Application
 import com.appdoctor.core.AppDoctor
+import com.appdoctor.core.AppDoctorConfig
 
 /**
  * Sample [Application] showing the one-line AppDoctor integration.
@@ -16,6 +17,9 @@ class SampleApplication : Application() {
 
         // The only line you need. A draggable floating button now appears on every
         // Activity in debug builds; tapping it opens the diagnostics dashboard.
-        AppDoctor.install(this)
+        AppDoctor.install(
+            this,
+            AppDoctorConfig(enableSessionReports = true),
+        )
     }
 }

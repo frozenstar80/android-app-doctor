@@ -1,0 +1,1 @@
+-keep class com.appdoctor.session.AppDoctorSessionPluginFactory { <init>(); public *; }

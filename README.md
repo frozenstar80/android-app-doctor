@@ -1,7 +1,7 @@
 # 🩺 AppDoctor
 
 **A zero‑config, debug‑only diagnostics overlay for Android.**
-One line in your `Application` gives you a draggable floating button on every screen that opens a live dashboard of **device info, app info, memory, FPS, CPU, network requests, database queries and Compose runtime** — and it compiles to **nothing** in release builds.
+One line in your `Application` gives you a draggable floating button on every screen that opens a live dashboard of **device info, app info, memory, FPS, CPU, network requests, database queries, Compose runtime, deterministic health diagnostics and a unified timeline** — and it compiles to **nothing** in release builds.
 
 ```kotlin
 class MyApp : Application() {
@@ -12,7 +12,7 @@ class MyApp : Application() {
 }
 ```
 
-> Phase 4 complete. Built with Kotlin, Jetpack Compose and Clean Architecture.
+> Phase 7 complete. Built with Kotlin, Jetpack Compose and Clean Architecture.
 
 ---
 
@@ -30,6 +30,9 @@ class MyApp : Application() {
 | 🌐 | **Network Inspector** | OkHttp interceptor + dashboard tab with search/filter/sort, headers/body/timing details, copy/share/export actions. |
 | 🗄️ | **Database Inspector** | Runtime SQL metrics for Room/SQLite: query, type, duration, rows, success, thread, transaction — plus optional analytics. Dashboard tab with search/filter/sort + copy/export. |
 | 🧬 | **Compose Inspector** | Runtime Compose metrics via **stable** APIs: recompositions, rate, burst durations, composition/frame counts — plus opt-in per-composable tracking and optional analytics. Dashboard tab with lightweight charts. |
+| 🩺 | **AppDoctor Intelligence (Diagnostics)** | Optional pure-Kotlin rule engine (`appdoctor-diagnostics`) that consumes collector metrics, computes deterministic health scores, detects issues with confidence, and powers the Health tab. |
+| 🕒 | **Timeline Engine** | Optional observational event stream (`appdoctor-timeline`) that correlates collector and diagnostics activity into a chronological session timeline with filtering/search/export. |
+| 🧾 | **Session Reports** | Optional local report runtime (`appdoctor-session`) that aggregates metadata, timeline, diagnostics, health, collector summaries and analytics into JSON/Markdown/ZIP exports. |
 | 🔌 | **Programmatic control** | `enable()`, `disable()`, `isEnabled()`. |
 | 🚫 | **Release‑safe** | Complete **no‑op** in non‑debuggable builds — no lifecycle callbacks, monitors, or overlay are ever created. |
 
@@ -93,6 +96,9 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and the ful
 | **`appdoctor-network`** | Android library | OkHttp interception, bounded request store, and Network dashboard tab plugin. | ✅ |
 | **`appdoctor-database`** | Android library | SupportSQLite/Room query instrumentation, bounded query store, optional analytics, and Database dashboard tab plugin. | ✅ |
 | **`appdoctor-compose`** | Android library | Stable-API Compose runtime metrics (recomposer + Choreographer), opt-in per-composable tracking, optional analytics, and Compose dashboard tab plugin. | ✅ |
+| **`appdoctor-diagnostics`** | Android library | Optional diagnostics runtime: deterministic issue/rule engine, confidence, lifecycle, recommendations, health scoring. | ❌ |
+| **`appdoctor-timeline`** | Android library | Optional observational timeline runtime: event capture, grouping, filtering/search, JSON/Markdown export. | ❌ |
+| **`appdoctor-session`** | Android library | Optional local session report runtime: aggregation + export (`JSON`/`Markdown`/`ZIP`) + bounded report storage. | ❌ |
 | **`sample-app`** | Android app | Demonstrates the one‑line integration. | ✅ |
 
 ---
@@ -108,6 +114,9 @@ dependencies {
     debugImplementation(project(":appdoctor-network")) // Network inspector plugin + UI tab
     debugImplementation(project(":appdoctor-database")) // Database inspector plugin + UI tab
     debugImplementation(project(":appdoctor-compose")) // Compose runtime inspector plugin + UI tab
+    debugImplementation(project(":appdoctor-diagnostics")) // Optional diagnostics intelligence + Health tab data
+    debugImplementation(project(":appdoctor-timeline")) // Optional timeline engine + Timeline tab data
+    debugImplementation(project(":appdoctor-session")) // Optional local session report generation/export
 }
 ```
 
@@ -178,6 +187,10 @@ fun ProductCard(product: Product) {
 
 Opt into aggregate analytics with `AppDoctorConfig(enableComposeAnalytics = true)`. See [`docs/COMPOSE.md`](docs/COMPOSE.md).
 
+Session reports are disabled by default; enable with
+`AppDoctorConfig(enableSessionReports = true)`. See
+[`docs/SESSION_REPORTS.md`](docs/SESSION_REPORTS.md).
+
 ### Configuration (optional)
 
 ```kotlin
@@ -199,6 +212,16 @@ AppDoctor.install(
         enableComposableTracking = false, // opt in to per-composable tracking
         trackedComposableLimit = 200,    // bounded tracked-composable history
         enableComposeAnalytics = false,  // opt in to Compose analytics
+        enableDiagnostics = false,       // opt in to diagnostics intelligence
+        analysisInterval = 2_000L, // diagnostics rule evaluation cadence
+        maximumIssueHistory = 200,       // bounded diagnostics issue history
+        minimumConfidence = 55,          // confidence gate for publishing issues
+        enableTimeline = false,          // opt in to timeline capture
+        maximumTimelineEvents = 1_000,   // bounded timeline history
+        timelineGroupingWindowMillis = 2_000L, // temporal grouping window
+        enableSessionReports = false,    // opt in to local session reports
+        maximumStoredReports = 10,       // bounded in-memory stored report history
+        autoGenerateOnCrash = false,     // placeholder (no crash auto-generation yet)
     ),
 )
 ```
@@ -300,7 +323,8 @@ The [`sample-app`](sample-app) module demonstrates the full integration:
 - [x] **Phase 2:** Network Inspector ✅.
 - [x] **Phase 3:** Database (Room) runtime inspector ✅ — SQL metrics + optional analytics.
 - [x] **Phase 4:** Compose runtime inspector ✅ — recomposition/frame metrics, opt-in tracking + optional analytics.
-- [ ] **Phase 5:** crash/ANR capture, log viewer, public plugin system + Maven Central publishing.
+- [x] **Phase 5:** AppDoctor Intelligence ✅ — optional diagnostics module, deterministic health scoring, issue engine, confidence and Health dashboard tab.
+- [x] **Phase 6:** Timeline Engine ✅ — optional observational session timeline with filtering/search/grouping/export.
 
 ---
 

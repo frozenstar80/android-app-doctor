@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-07-18T19:36:12.809Z" hostname="Mac.lan" time="0.011">
+<testsuite name="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-07-19T04:40:18.311Z" hostname="MacBook-Air.local" time="0.009">
   <properties/>
-  <testcase name="tags statements with the open transaction id" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.007"/>
-  <testcase name="does not record when recorder is idle" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.0"/>
+  <testcase name="tags statements with the open transaction id" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.006"/>
+  <testcase name="does not record when recorder is idle" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.001"/>
   <testcase name="executeUpdateDelete records UPDATE with rows affected" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.001"/>
   <testcase name="executeInsert records INSERT with one row affected" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.0"/>
-  <testcase name="failure is recorded and rethrown" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.002"/>
+  <testcase name="failure is recorded and rethrown" classname="com.appdoctor.database.internal.sqlite.AppDoctorSupportSQLiteStatementTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

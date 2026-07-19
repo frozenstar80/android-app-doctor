@@ -47,6 +47,20 @@ import com.appdoctor.core.plugin.AppDoctorPlugin
  *   default; global runtime metrics do not require it.
  * @property trackedComposableLimit max number of distinct tracked composables retained
  *   in-memory by the Compose inspector when [enableComposableTracking] is on.
+ * @property enableDiagnostics enables automatic installation of the optional diagnostics
+ *   analysis plugin found on the classpath (`appdoctor-diagnostics`).
+ * @property analysisInterval interval at which diagnostics evaluates collector metrics.
+ * @property maximumIssueHistory max number of diagnostics issue records retained in-memory.
+ * @property minimumConfidence minimum confidence (`0..100`) required to publish an issue.
+ * @property enableTimeline enables automatic installation of the optional timeline module
+ *   found on the classpath (`appdoctor-timeline`).
+ * @property maximumTimelineEvents max timeline events retained in-memory.
+ * @property timelineGroupingWindowMillis time window used to group nearby events.
+ * @property enableSessionReports enables automatic installation of the optional session
+ *   reports module found on the classpath (`appdoctor-session`).
+ * @property maximumStoredReports max generated session reports retained in-memory by the
+ *   session module repository.
+ * @property autoGenerateOnCrash placeholder for future crash-triggered auto-generation.
  */
 public data class AppDoctorConfig(
     public val startEnabled: Boolean = true,
@@ -67,6 +81,16 @@ public data class AppDoctorConfig(
     public val enableComposeAnalytics: Boolean = false,
     public val enableComposableTracking: Boolean = false,
     public val trackedComposableLimit: Int = DEFAULT_TRACKED_COMPOSABLE_LIMIT,
+    public val enableDiagnostics: Boolean = false,
+    public val analysisInterval: Long = DEFAULT_ANALYSIS_INTERVAL_MS,
+    public val maximumIssueHistory: Int = DEFAULT_MAXIMUM_ISSUE_HISTORY,
+    public val minimumConfidence: Int = DEFAULT_MINIMUM_CONFIDENCE,
+    public val enableTimeline: Boolean = false,
+    public val maximumTimelineEvents: Int = DEFAULT_MAXIMUM_TIMELINE_EVENTS,
+    public val timelineGroupingWindowMillis: Long = DEFAULT_TIMELINE_GROUPING_WINDOW_MS,
+    public val enableSessionReports: Boolean = false,
+    public val maximumStoredReports: Int = DEFAULT_MAXIMUM_STORED_REPORTS,
+    public val autoGenerateOnCrash: Boolean = false,
 ) {
     public companion object {
         /** Default sample interval (1s) for memory & CPU monitors. */
@@ -81,5 +105,17 @@ public data class AppDoctorConfig(
         public const val DEFAULT_SLOW_QUERY_THRESHOLD_MS: Long = 16L
         /** Default number of retained tracked composables. */
         public const val DEFAULT_TRACKED_COMPOSABLE_LIMIT: Int = 200
+        /** Default diagnostics analysis interval (2s). */
+        public const val DEFAULT_ANALYSIS_INTERVAL_MS: Long = 2_000L
+        /** Default diagnostics issue history bound. */
+        public const val DEFAULT_MAXIMUM_ISSUE_HISTORY: Int = 200
+        /** Default diagnostics confidence gate. */
+        public const val DEFAULT_MINIMUM_CONFIDENCE: Int = 55
+        /** Default max timeline events retained in-memory. */
+        public const val DEFAULT_MAXIMUM_TIMELINE_EVENTS: Int = 1_000
+        /** Default temporal window for event grouping. */
+        public const val DEFAULT_TIMELINE_GROUPING_WINDOW_MS: Long = 2_000L
+        /** Default max generated reports retained in-memory by session reports. */
+        public const val DEFAULT_MAXIMUM_STORED_REPORTS: Int = 10
     }
 }

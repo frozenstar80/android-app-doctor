@@ -1,0 +1,1 @@
+-keep class com.appdoctor.timeline.AppDoctorTimelinePluginFactory { <init>(); public *; }

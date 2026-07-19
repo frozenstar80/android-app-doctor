@@ -2,6 +2,7 @@ package com.appdoctor.core.plugin
 
 import android.app.Application
 import com.appdoctor.core.MetricsProvider
+import com.appdoctor.core.metric.CollectorRegistry
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -17,6 +18,9 @@ public interface PluginContext {
 
     /** Live metrics a plugin may want to read or surface. */
     public val metrics: MetricsProvider
+
+    /** Read-only registry of all available metric collectors. */
+    public val collectors: CollectorRegistry
 
     /**
      * A long-lived scope tied to AppDoctor's lifetime. Coroutines launched here are
