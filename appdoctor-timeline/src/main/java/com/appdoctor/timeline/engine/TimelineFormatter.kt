@@ -1,16 +1,17 @@
 package com.appdoctor.timeline.engine
 
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.timeline.model.RuntimeTimelineEvent
 
 public class TimelineFormatter {
     public fun titleFor(collectorId: String): String = when (collectorId) {
-        "memory" -> "Memory Sample"
-        "cpu" -> "CPU Sample"
-        "fps" -> "FPS Sample"
-        "network" -> "Network Activity"
-        "database" -> "Database Activity"
-        "compose" -> "Compose Activity"
-        "diagnostics" -> "Diagnostic Event"
+        CollectorIds.MEMORY -> "Memory Sample"
+        CollectorIds.CPU -> "CPU Sample"
+        CollectorIds.FPS -> "FPS Sample"
+        CollectorIds.NETWORK -> "Network Activity"
+        CollectorIds.DATABASE -> "Database Activity"
+        CollectorIds.COMPOSE -> "Compose Activity"
+        CollectorIds.DIAGNOSTICS -> "Diagnostic Event"
         else -> "$collectorId Activity"
     }
 

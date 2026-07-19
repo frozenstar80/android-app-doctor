@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.appdoctor.core.AppDoctor
 import com.appdoctor.core.AppDoctorConfig
+import com.appdoctor.core.ids.PluginIds
 import com.appdoctor.core.metric.Metric
 import com.appdoctor.core.metric.MetricCollector
 import com.appdoctor.core.metric.MetricCollectorProvider
@@ -86,7 +87,7 @@ public class AppDoctorNetworkPlugin(
     }
 
     public companion object {
-        public const val NETWORK_PLUGIN_ID: String = "network-inspector"
+        public const val NETWORK_PLUGIN_ID: String = PluginIds.NETWORK_INSPECTOR
 
         /**
          * Returns the currently installed network plugin instance, if present.

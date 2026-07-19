@@ -7,6 +7,7 @@ import com.appdoctor.core.info.AppInfo
 import com.appdoctor.core.info.AppInfoProvider
 import com.appdoctor.core.info.DeviceInfo
 import com.appdoctor.core.info.DeviceInfoProvider
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.core.internal.collector.DefaultCollectorRegistry
 import com.appdoctor.core.internal.collector.MonitorCollector
 import com.appdoctor.core.internal.lifecycle.ActivityTracker
@@ -155,9 +156,9 @@ internal class AppDoctorEngine(
     // ---- Internals -----------------------------------------------------------------
 
     private fun registerCoreCollectors() {
-        collectorRegistry.register(MonitorCollector(MEMORY_ID, memoryMonitor))
-        collectorRegistry.register(MonitorCollector(CPU_ID, cpuMonitor))
-        collectorRegistry.register(MonitorCollector(FPS_ID, fpsMonitor))
+        collectorRegistry.register(MonitorCollector(CollectorIds.MEMORY, memoryMonitor))
+        collectorRegistry.register(MonitorCollector(CollectorIds.CPU, cpuMonitor))
+        collectorRegistry.register(MonitorCollector(CollectorIds.FPS, fpsMonitor))
     }
 
     private fun reconcileOverlay(enabled: Boolean) {
@@ -201,6 +202,7 @@ internal class AppDoctorEngine(
     private fun loadBuiltinPlugins(): List<AppDoctorPlugin> = try {
         ServiceLoader.load(AppDoctorPluginFactory::class.java, AppDoctorPluginFactory::class.java.classLoader)
             .toList()
+            .sortedWith(compareBy<AppDoctorPluginFactory>({ it.priority }, { it::class.java.name }))
             .mapNotNull(::createBuiltinPlugin)
     } catch (t: Throwable) {
         Logger.w("Built-in plugin discovery failed.", t)
@@ -214,9 +216,5 @@ internal class AppDoctorEngine(
         null
     }
 
-    private companion object {
-        private const val MEMORY_ID = "memory"
-        private const val CPU_ID = "cpu"
-        private const val FPS_ID = "fps"
-    }
+    private companion object
 }

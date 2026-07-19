@@ -1,5 +1,6 @@
 package com.appdoctor.diagnostics.engine.rules
 
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.diagnostics.engine.IssueRule
 import com.appdoctor.diagnostics.engine.RuleContext
 import com.appdoctor.diagnostics.engine.RuleEvidence
@@ -19,7 +20,7 @@ public class SustainedHighMemoryUsageRule : IssueRule {
             description = "Heap usage remained above ${THRESHOLD_PERCENT.toInt()}% for $breaches/$SAMPLE_COUNT recent samples.",
             category = IssueCategory.MEMORY,
             severity = IssueSeverity.ERROR,
-            collectorIds = listOf("memory"),
+            collectorIds = listOf(CollectorIds.MEMORY),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = breaches,
@@ -50,7 +51,7 @@ public class RapidMemoryGrowthRule : IssueRule {
             description = "Heap usage grew by ${growth.toInt()} percentage points across the recent analysis window.",
             category = IssueCategory.MEMORY,
             severity = IssueSeverity.WARNING,
-            collectorIds = listOf("memory"),
+            collectorIds = listOf(CollectorIds.MEMORY),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = breaches.coerceAtLeast(1),

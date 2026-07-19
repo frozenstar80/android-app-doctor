@@ -3,6 +3,7 @@ package com.appdoctor.database
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.appdoctor.core.AppDoctorConfig
+import com.appdoctor.core.ids.PluginIds
 import com.appdoctor.core.metric.Metric
 import com.appdoctor.core.metric.MetricCollector
 import com.appdoctor.core.metric.MetricCollectorProvider
@@ -99,6 +100,6 @@ public class AppDoctorDatabasePlugin(
     }
 
     public companion object {
-        public const val DATABASE_PLUGIN_ID: String = "database-inspector"
+        public const val DATABASE_PLUGIN_ID: String = PluginIds.DATABASE_INSPECTOR
     }
 }

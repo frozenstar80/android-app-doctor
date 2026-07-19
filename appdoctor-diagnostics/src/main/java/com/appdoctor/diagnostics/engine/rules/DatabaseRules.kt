@@ -1,5 +1,6 @@
 package com.appdoctor.diagnostics.engine.rules
 
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.diagnostics.engine.IssueRule
 import com.appdoctor.diagnostics.engine.RuleContext
 import com.appdoctor.diagnostics.engine.RuleEvidence
@@ -20,7 +21,7 @@ public class SlowDatabaseQueriesRule : IssueRule {
             description = "Average query duration is ${avgDuration.toInt()}ms with $slowCount slow queries in the latest sample window.",
             category = IssueCategory.DATABASE,
             severity = IssueSeverity.WARNING,
-            collectorIds = listOf("database"),
+            collectorIds = listOf(CollectorIds.DATABASE),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = slowCount.coerceAtLeast(1),
@@ -52,7 +53,7 @@ public class HighDatabaseQueryFrequencyRule : IssueRule {
             description = "Observed ${recent.size} queries in the last 60 seconds.",
             category = IssueCategory.DATABASE,
             severity = IssueSeverity.INFO,
-            collectorIds = listOf("database"),
+            collectorIds = listOf(CollectorIds.DATABASE),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = recent.size,
@@ -82,7 +83,7 @@ public class HighDatabaseFailureRateRule : IssueRule {
             description = "Recent database failures reached ${(failureRate * 100).toInt()}% ($failures/${samples.size}).",
             category = IssueCategory.DATABASE,
             severity = IssueSeverity.ERROR,
-            collectorIds = listOf("database"),
+            collectorIds = listOf(CollectorIds.DATABASE),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = failures,

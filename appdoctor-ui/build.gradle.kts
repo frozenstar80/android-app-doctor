@@ -49,6 +49,9 @@ kotlin {
 dependencies {
     // Core is exposed transitively so consumers get the public API from a single dependency.
     api(project(":appdoctor-core"))
+    implementation(project(":appdoctor-diagnostics"))
+    implementation(project(":appdoctor-timeline"))
+    implementation(project(":appdoctor-session"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

@@ -9,6 +9,7 @@ import com.appdoctor.core.plugin.AppDoctorPluginFactory
  * `META-INF/services`. Returns `null` when [AppDoctorConfig.captureCompose] is `false`.
  */
 public class AppDoctorComposePluginFactory : AppDoctorPluginFactory {
+    override val priority: Int = 100
 
     override fun create(config: AppDoctorConfig): AppDoctorPlugin? =
         if (config.captureCompose) AppDoctorComposePlugin(config) else null

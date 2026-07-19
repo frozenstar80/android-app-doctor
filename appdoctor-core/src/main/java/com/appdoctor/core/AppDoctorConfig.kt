@@ -60,6 +60,8 @@ import com.appdoctor.core.plugin.AppDoctorPlugin
  *   reports module found on the classpath (`appdoctor-session`).
  * @property maximumStoredReports max generated session reports retained in-memory by the
  *   session module repository.
+ * @property includeFullSessionPayloads when enabled, session reports include detailed
+ *   network/database payload capture; otherwise reports retain only summaries.
  * @property autoGenerateOnCrash placeholder for future crash-triggered auto-generation.
  * @property enableAi enables automatic installation of the optional AI analysis module found
  *   on the classpath (`appdoctor-ai`).
@@ -102,6 +104,7 @@ public data class AppDoctorConfig(
     public val timelineGroupingWindowMillis: Long = DEFAULT_TIMELINE_GROUPING_WINDOW_MS,
     public val enableSessionReports: Boolean = false,
     public val maximumStoredReports: Int = DEFAULT_MAXIMUM_STORED_REPORTS,
+    public val includeFullSessionPayloads: Boolean = false,
     public val autoGenerateOnCrash: Boolean = false,
     public val enableAi: Boolean = false,
     public val aiProvider: String? = null,

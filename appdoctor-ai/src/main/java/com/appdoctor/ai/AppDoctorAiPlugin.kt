@@ -16,8 +16,10 @@ import com.appdoctor.ai.sanitize.ReportSanitizer
 import com.appdoctor.ai.ui.AiTabScreen
 import com.appdoctor.core.AppDoctor
 import com.appdoctor.core.AppDoctorConfig
+import com.appdoctor.core.ids.PluginIds
 import com.appdoctor.core.plugin.PluginContext
 import com.appdoctor.session.AppDoctorSessionPlugin
+import com.appdoctor.session.api.SessionReportProvider
 import com.appdoctor.session.model.SessionReport
 import com.appdoctor.ui.dashboard.plugin.DashboardTabPlugin
 import kotlinx.coroutines.CoroutineScope
@@ -120,6 +122,9 @@ public class AppDoctorAiPlugin(
 
     private fun latestReport(): SessionReport? {
         val sessionPlugin = AppDoctor.plugin(AppDoctorSessionPlugin.SESSION_PLUGIN_ID) ?: return null
+        if (sessionPlugin is SessionReportProvider) {
+            return runCatching { kotlinx.coroutines.runBlocking { sessionPlugin.buildReport() } }.getOrNull()
+        }
         val generate = sessionPlugin.javaClass.methods.firstOrNull {
             it.name == "generate" && it.parameterCount == 0
         } ?: return null
@@ -135,6 +140,6 @@ public class AppDoctorAiPlugin(
     }
 
     public companion object {
-        public const val AI_PLUGIN_ID: String = "ai-analysis"
+        public const val AI_PLUGIN_ID: String = PluginIds.AI_ANALYSIS
     }
 }

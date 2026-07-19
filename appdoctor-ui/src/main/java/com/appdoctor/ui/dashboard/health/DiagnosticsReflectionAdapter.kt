@@ -1,6 +1,11 @@
 package com.appdoctor.ui.dashboard.health
 
 import com.appdoctor.core.AppDoctor
+import com.appdoctor.core.ids.PluginIds
+import com.appdoctor.diagnostics.AppDoctorDiagnosticsPlugin
+import com.appdoctor.diagnostics.api.DiagnosticsReadApi
+import com.appdoctor.diagnostics.model.DiagnosticIssue
+import com.appdoctor.diagnostics.model.HealthReport
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -38,14 +43,26 @@ internal class DiagnosticsReflectionAdapter {
 
     private val diagnosticsPlugin: Any? get() = AppDoctor.plugin(DIAGNOSTICS_PLUGIN_ID)
 
+    @Suppress("UNCHECKED_CAST")
     val healthFlow: StateFlow<Any?>
-        get() = diagnosticsPlugin.readFlow("healthReport", FALLBACK_HEALTH_FLOW)
+        get() = when (val plugin = diagnosticsPlugin) {
+            is DiagnosticsReadApi -> plugin.healthReports() as StateFlow<Any?>
+            else -> plugin.readFlow("healthReport", FALLBACK_HEALTH_FLOW)
+        }
 
+    @Suppress("UNCHECKED_CAST")
     val issuesFlow: StateFlow<List<Any>>
-        get() = diagnosticsPlugin.readFlow("issues", FALLBACK_ISSUES_FLOW)
+        get() = when (val plugin = diagnosticsPlugin) {
+            is DiagnosticsReadApi -> plugin.issues() as StateFlow<List<Any>>
+            else -> plugin.readFlow("issues", FALLBACK_ISSUES_FLOW)
+        }
 
     fun dismissIssue(id: String) {
         val plugin = diagnosticsPlugin ?: return
+        if (plugin is AppDoctorDiagnosticsPlugin) {
+            plugin.dismissIssue(id)
+            return
+        }
         val method = plugin.javaClass.methods.firstOrNull {
             it.name == "dismissIssue" && it.parameterCount == 1 && it.parameterTypes[0] == String::class.java
         } ?: return
@@ -53,6 +70,16 @@ internal class DiagnosticsReflectionAdapter {
     }
 
     fun parseHealth(raw: Any?): HealthUiModel? {
+        if (raw is HealthReport) {
+            return HealthUiModel(
+                overallScore = raw.overallScore,
+                performanceScore = raw.performanceScore,
+                memoryScore = raw.memoryScore,
+                networkScore = raw.networkScore,
+                databaseScore = raw.databaseScore,
+                composeScore = raw.composeScore,
+            )
+        }
         val source = raw ?: return null
         val overall = source.readInt("overallScore") ?: return null
         val performance = source.readInt("performanceScore") ?: return null
@@ -70,7 +97,29 @@ internal class DiagnosticsReflectionAdapter {
         )
     }
 
-    fun parseIssues(raw: List<Any>): List<IssueUiModel> = raw.mapNotNull { parseIssue(it) }
+    fun parseIssues(raw: List<Any>): List<IssueUiModel> = raw.mapNotNull { issue ->
+        when (issue) {
+            is DiagnosticIssue -> IssueUiModel(
+                id = issue.id,
+                title = issue.title,
+                description = issue.description,
+                category = issue.category.name,
+                severity = issue.severity.name,
+                confidence = issue.confidence,
+                timestampMillis = issue.timestampMillis,
+                collectorIds = issue.collectorIds,
+                recommendation = RecommendationUiModel(
+                    problem = issue.recommendation.problem,
+                    reason = issue.recommendation.reason,
+                    recommendation = issue.recommendation.recommendation,
+                    expectedImpact = issue.recommendation.expectedImpact,
+                ),
+                documentationLink = issue.documentationLink,
+                status = issue.status.name,
+            )
+            else -> parseIssue(issue)
+        }
+    }
 
     private fun parseIssue(source: Any): IssueUiModel? {
         val recommendation = source.readAny("recommendation") ?: return null
@@ -95,7 +144,7 @@ internal class DiagnosticsReflectionAdapter {
     }
 
     companion object {
-        private const val DIAGNOSTICS_PLUGIN_ID = "diagnostics"
+        private const val DIAGNOSTICS_PLUGIN_ID = PluginIds.DIAGNOSTICS
         private val FALLBACK_HEALTH_FLOW = MutableStateFlow<Any?>(null)
         private val FALLBACK_ISSUES_FLOW = MutableStateFlow(emptyList<Any>())
     }

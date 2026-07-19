@@ -14,6 +14,12 @@ import com.appdoctor.core.AppDoctorConfig
  *  - [create] should be cheap and side-effect free beyond building the plugin.
  */
 public interface AppDoctorPluginFactory {
+    /**
+     * Deterministic load order used when ServiceLoader discovers multiple factories.
+     * Lower values load first.
+     */
+    public val priority: Int
+        get() = 0
 
     /**
      * Creates the plugin, or returns `null` to opt out for this [config] (for example the

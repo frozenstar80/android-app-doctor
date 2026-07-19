@@ -227,6 +227,7 @@ AppDoctor.install(
         timelineGroupingWindowMillis = 2_000L, // temporal grouping window
         enableSessionReports = false,    // opt in to local session reports
         maximumStoredReports = 10,       // bounded in-memory stored report history
+        includeFullSessionPayloads = false, // summary-only reports by default
         autoGenerateOnCrash = false,     // placeholder (no crash auto-generation yet)
         enableAi = false,                // opt in to AI module (tab + runtime)
         aiProvider = null,               // "openai" | "gemini" | "local" | "custom"

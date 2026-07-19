@@ -1,6 +1,7 @@
 package com.appdoctor.network.metric
 
 import com.appdoctor.core.metric.MetricCollector
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.network.repository.NetworkRequestRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,7 +35,7 @@ internal class NetworkMetricCollector(
     override fun snapshot(): NetworkMetric = NetworkMetric(repository.requests.value)
 
     internal companion object {
-        const val ID: String = "network"
+        const val ID: String = CollectorIds.NETWORK
         private const val STOP_TIMEOUT_MS = 5_000L
     }
 }

@@ -54,4 +54,5 @@ public data class SessionReport(
     public val applicationInformation: Map<String, String>,
     public val configuration: Map<String, String>,
     public val buildInformation: Map<String, String>,
+    public val detailedPayloads: Map<String, List<Map<String, String>>> = emptyMap(),
 )

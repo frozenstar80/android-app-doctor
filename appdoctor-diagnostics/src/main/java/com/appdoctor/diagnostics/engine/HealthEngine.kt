@@ -1,5 +1,6 @@
 package com.appdoctor.diagnostics.engine
 
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.diagnostics.model.DiagnosticIssue
 import com.appdoctor.diagnostics.model.HealthReport
 import com.appdoctor.diagnostics.model.IssueCategory
@@ -56,7 +57,7 @@ public class HealthEngine {
         val latencyPenalty = ((avgLatency - 250.0).coerceAtLeast(0.0) / 15.0).roundToInt()
         val failurePenalty = (failureRate * 60.0).roundToInt()
         val issuePenalty = issuePenalty(openIssues) { category, collectors ->
-            category == IssueCategory.NETWORK || collectors.contains("network")
+            category == IssueCategory.NETWORK || collectors.contains(CollectorIds.NETWORK)
         }
         return (100 - latencyPenalty - failurePenalty - issuePenalty).coerceIn(0, 100)
     }
@@ -69,7 +70,7 @@ public class HealthEngine {
         val durationPenalty = ((avgDuration - 8.0).coerceAtLeast(0.0) * 1.5).roundToInt()
         val failurePenalty = (failureRate * 70.0).roundToInt()
         val issuePenalty = issuePenalty(openIssues) { category, collectors ->
-            category == IssueCategory.DATABASE || collectors.contains("database")
+            category == IssueCategory.DATABASE || collectors.contains(CollectorIds.DATABASE)
         }
         return (100 - durationPenalty - failurePenalty - issuePenalty).coerceIn(0, 100)
     }
@@ -81,7 +82,7 @@ public class HealthEngine {
         val recompositionPenalty = ((avgRate - 40.0).coerceAtLeast(0.0) * 0.4).roundToInt()
         val frameDropPenalty = (avgFrameDropRate * 120.0).roundToInt()
         val issuePenalty = issuePenalty(openIssues) { category, collectors ->
-            category == IssueCategory.COMPOSE || collectors.contains("compose")
+            category == IssueCategory.COMPOSE || collectors.contains(CollectorIds.COMPOSE)
         }
         return (100 - recompositionPenalty - frameDropPenalty - issuePenalty).coerceIn(0, 100)
     }

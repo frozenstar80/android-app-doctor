@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:47:50.280Z" hostname="Mac.lan" time="0.027">
+<testsuite name="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:47.947Z" hostname="Mac.lan" time="0.023">
   <properties/>
-  <testcase name="clear empties the store" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.004"/>
-  <testcase name="keeps only latest max queries newest first" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.001"/>
-  <testcase name="supports concurrent writers safely" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.022"/>
+  <testcase name="clear empties the store" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.008"/>
+  <testcase name="keeps only latest max queries newest first" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.0"/>
+  <testcase name="supports concurrent writers safely" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.014"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

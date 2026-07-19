@@ -1,5 +1,6 @@
 package com.appdoctor.diagnostics.engine.rules
 
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.diagnostics.engine.IssueRule
 import com.appdoctor.diagnostics.engine.RuleContext
 import com.appdoctor.diagnostics.engine.RuleEvidence
@@ -20,7 +21,7 @@ public class HighComposeRecompositionRateRule : IssueRule {
             description = "Compose recomposition rate averaged ${avgRate.toInt()}/s with $breaches high-rate samples.",
             category = IssueCategory.COMPOSE,
             severity = IssueSeverity.WARNING,
-            collectorIds = listOf("compose"),
+            collectorIds = listOf(CollectorIds.COMPOSE),
             documentationLink = DOC_LINK_COMPOSE,
             evidence = RuleEvidence(
                 supportingPoints = breaches,
@@ -53,7 +54,7 @@ public class FpsDropWithSlowDatabaseRule : IssueRule {
             description = "Average FPS is ${fps.toInt()} while ${recentSlowQueries.size} slow queries were captured in the same window.",
             category = IssueCategory.CROSS_COLLECTOR,
             severity = IssueSeverity.ERROR,
-            collectorIds = listOf("fps", "database"),
+            collectorIds = listOf(CollectorIds.FPS, CollectorIds.DATABASE),
             documentationLink = DOC_LINK_CROSS,
             evidence = RuleEvidence(
                 supportingPoints = recentSlowQueries.size,
@@ -87,7 +88,7 @@ public class FpsDropWithSlowNetworkRule : IssueRule {
             description = "Average FPS is ${fps.toInt()} while ${recentSlowRequests.size} slow requests were captured in the same window.",
             category = IssueCategory.CROSS_COLLECTOR,
             severity = IssueSeverity.ERROR,
-            collectorIds = listOf("fps", "network"),
+            collectorIds = listOf(CollectorIds.FPS, CollectorIds.NETWORK),
             documentationLink = DOC_LINK_CROSS,
             evidence = RuleEvidence(
                 supportingPoints = recentSlowRequests.size,
@@ -121,7 +122,7 @@ public class HighMemoryWithDatabaseActivityRule : IssueRule {
             description = "Average memory usage is ${avgUsage.toInt()}% with $dbRecent database operations in the same time window.",
             category = IssueCategory.CROSS_COLLECTOR,
             severity = IssueSeverity.WARNING,
-            collectorIds = listOf("memory", "database"),
+            collectorIds = listOf(CollectorIds.MEMORY, CollectorIds.DATABASE),
             documentationLink = DOC_LINK_CROSS,
             evidence = RuleEvidence(
                 supportingPoints = dbRecent,

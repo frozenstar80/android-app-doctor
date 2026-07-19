@@ -1,8 +1,10 @@
 package com.appdoctor.diagnostics
 
 import com.appdoctor.core.AppDoctorConfig
+import com.appdoctor.core.ids.PluginIds
 import com.appdoctor.core.plugin.AppDoctorPlugin
 import com.appdoctor.core.plugin.PluginContext
+import com.appdoctor.diagnostics.api.DiagnosticsReadApi
 import com.appdoctor.diagnostics.engine.ConfidenceCalculator
 import com.appdoctor.diagnostics.engine.DiagnosticsEngine
 import com.appdoctor.diagnostics.engine.HealthEngine
@@ -31,7 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
  */
 public class AppDoctorDiagnosticsPlugin(
     private val config: AppDoctorConfig = AppDoctorConfig(),
-) : AppDoctorPlugin {
+) : AppDoctorPlugin, DiagnosticsReadApi {
 
     override val id: String = DIAGNOSTICS_PLUGIN_ID
     override val title: String = "Diagnostics"
@@ -89,7 +91,11 @@ public class AppDoctorDiagnosticsPlugin(
 
     public fun dismissIssue(issueId: String): Unit = engine?.dismissIssue(issueId) ?: Unit
 
+    override fun healthReports(): StateFlow<HealthReport> = healthReport
+
+    override fun issues(): StateFlow<List<DiagnosticIssue>> = issues
+
     public companion object {
-        public const val DIAGNOSTICS_PLUGIN_ID: String = "diagnostics"
+        public const val DIAGNOSTICS_PLUGIN_ID: String = PluginIds.DIAGNOSTICS
     }
 }

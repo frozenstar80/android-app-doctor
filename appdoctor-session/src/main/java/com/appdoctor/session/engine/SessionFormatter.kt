@@ -22,6 +22,7 @@ public class SessionFormatter {
             "applicationInformation" to report.applicationInformation,
             "configuration" to report.configuration,
             "buildInformation" to report.buildInformation,
+            "detailedPayloads" to report.detailedPayloads,
         ),
     )
 
@@ -84,6 +85,14 @@ public class SessionFormatter {
                 appendLine("### $module")
                 summary.forEach { (key, value) -> appendLine("- $key: `$value`") }
                 appendLine()
+            }
+        }
+        appendLine("## Detailed Payloads")
+        if (report.detailedPayloads.isEmpty()) {
+            appendLine("- Not captured (summary-only mode)")
+        } else {
+            report.detailedPayloads.forEach { (module, entries) ->
+                appendLine("- $module entries: `${entries.size}`")
             }
         }
     }

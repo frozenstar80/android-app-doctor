@@ -1,6 +1,7 @@
 package com.appdoctor.timeline.engine
 
 import com.appdoctor.core.metric.Metric
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.core.monitor.cpu.CpuInfo
 import com.appdoctor.core.monitor.fps.FpsInfo
 import com.appdoctor.core.monitor.memory.MemoryInfo
@@ -28,7 +29,7 @@ public class TimelineEventFactory(
         previousSignature: String?,
     ): CollectorEventResult {
         return when (collectorId) {
-            "memory" -> simpleEvent(
+            CollectorIds.MEMORY -> simpleEvent(
                 sessionId = sessionId,
                 collectorId = collectorId,
                 category = TimelineCategory.MEMORY,
@@ -37,7 +38,7 @@ public class TimelineEventFactory(
                 previousSignature = previousSignature,
                 metadata = memoryMetadata(metric),
             )
-            "cpu" -> simpleEvent(
+            CollectorIds.CPU -> simpleEvent(
                 sessionId = sessionId,
                 collectorId = collectorId,
                 category = TimelineCategory.CPU,
@@ -46,7 +47,7 @@ public class TimelineEventFactory(
                 previousSignature = previousSignature,
                 metadata = cpuMetadata(metric),
             )
-            "fps" -> simpleEvent(
+            CollectorIds.FPS -> simpleEvent(
                 sessionId = sessionId,
                 collectorId = collectorId,
                 category = TimelineCategory.FPS,
@@ -55,7 +56,7 @@ public class TimelineEventFactory(
                 previousSignature = previousSignature,
                 metadata = fpsMetadata(metric),
             )
-            "compose" -> simpleEvent(
+            CollectorIds.COMPOSE -> simpleEvent(
                 sessionId = sessionId,
                 collectorId = collectorId,
                 category = TimelineCategory.COMPOSE,
@@ -64,8 +65,8 @@ public class TimelineEventFactory(
                 previousSignature = previousSignature,
                 metadata = composeMetadata(metric),
             )
-            "network" -> networkEvents(sessionId, metric, timestampMillis, previousSignature)
-            "database" -> databaseEvents(sessionId, metric, timestampMillis, previousSignature)
+            CollectorIds.NETWORK -> networkEvents(sessionId, metric, timestampMillis, previousSignature)
+            CollectorIds.DATABASE -> databaseEvents(sessionId, metric, timestampMillis, previousSignature)
             else -> simpleEvent(
                 sessionId = sessionId,
                 collectorId = collectorId,
@@ -96,8 +97,8 @@ public class TimelineEventFactory(
         RuntimeTimelineEvent(
             timestamp = timestamp,
             sessionId = sessionId,
-            source = "diagnostics",
-            collectorId = "diagnostics",
+            source = CollectorIds.DIAGNOSTICS,
+            collectorId = CollectorIds.DIAGNOSTICS,
             category = TimelineCategory.DIAGNOSTICS,
             title = "Diagnostic issue $status",
             summary = issue.readString("title") ?: "Diagnostics issue update",
@@ -153,7 +154,7 @@ public class TimelineEventFactory(
         previousSignature: String?,
     ): CollectorEventResult {
         val requests = metric.readList("requests")
-        val signature = "network:${requests.size}:${requests.firstOrNull()?.readLong("id") ?: -1L}"
+        val signature = "${CollectorIds.NETWORK}:${requests.size}:${requests.firstOrNull()?.readLong("id") ?: -1L}"
         if (signature == previousSignature) return CollectorEventResult(signature, emptyList())
 
         val newEvents = requests
@@ -166,8 +167,8 @@ public class TimelineEventFactory(
                 RuntimeTimelineEvent(
                     timestamp = request.readLong("timestampMillis") ?: timestampMillis,
                     sessionId = sessionId,
-                    source = "network",
-                    collectorId = "network",
+                    source = CollectorIds.NETWORK,
+                    collectorId = CollectorIds.NETWORK,
                     category = TimelineCategory.NETWORK,
                     title = "Network request",
                     summary = "${request.readString("method") ?: "?"} $url (${latency}ms)",
@@ -202,7 +203,7 @@ public class TimelineEventFactory(
         previousSignature: String?,
     ): CollectorEventResult {
         val queries = metric.readList("queries")
-        val signature = "database:${queries.size}:${queries.firstOrNull()?.readLong("id") ?: -1L}"
+        val signature = "${CollectorIds.DATABASE}:${queries.size}:${queries.firstOrNull()?.readLong("id") ?: -1L}"
         if (signature == previousSignature) return CollectorEventResult(signature, emptyList())
 
         val newEvents = queries
@@ -215,8 +216,8 @@ public class TimelineEventFactory(
                 RuntimeTimelineEvent(
                     timestamp = query.readLong("timestampMillis") ?: timestampMillis,
                     sessionId = sessionId,
-                    source = "database",
-                    collectorId = "database",
+                    source = CollectorIds.DATABASE,
+                    collectorId = CollectorIds.DATABASE,
                     category = TimelineCategory.DATABASE,
                     title = "Database query",
                     summary = "${query.readAny("type") ?: "SQL"} (${duration.toInt()}ms)",

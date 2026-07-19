@@ -1,5 +1,6 @@
 package com.appdoctor.diagnostics.engine.rules
 
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.diagnostics.engine.IssueRule
 import com.appdoctor.diagnostics.engine.RuleContext
 import com.appdoctor.diagnostics.engine.RuleEvidence
@@ -20,7 +21,7 @@ public class HighAverageNetworkLatencyRule : IssueRule {
             description = "Average request latency is ${avgLatency.toInt()}ms across ${samples.size} recent requests.",
             category = IssueCategory.NETWORK,
             severity = IssueSeverity.WARNING,
-            collectorIds = listOf("network"),
+            collectorIds = listOf(CollectorIds.NETWORK),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = breaches.coerceAtLeast(1),
@@ -51,7 +52,7 @@ public class RepeatedNetworkFailuresRule : IssueRule {
             description = "Recent network failures reached ${(failureRate * 100).toInt()}% ($failures/${samples.size}).",
             category = IssueCategory.NETWORK,
             severity = IssueSeverity.ERROR,
-            collectorIds = listOf("network"),
+            collectorIds = listOf(CollectorIds.NETWORK),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = failures,
@@ -82,7 +83,7 @@ public class ExcessiveNetworkRequestVolumeRule : IssueRule {
             description = "Observed ${recent.size} requests in the last 60 seconds.",
             category = IssueCategory.NETWORK,
             severity = IssueSeverity.INFO,
-            collectorIds = listOf("network"),
+            collectorIds = listOf(CollectorIds.NETWORK),
             documentationLink = DOC_LINK,
             evidence = RuleEvidence(
                 supportingPoints = recent.size,

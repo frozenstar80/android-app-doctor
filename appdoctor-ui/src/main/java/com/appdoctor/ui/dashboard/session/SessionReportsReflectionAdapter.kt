@@ -1,6 +1,7 @@
 package com.appdoctor.ui.dashboard.session
 
 import com.appdoctor.core.AppDoctor
+import com.appdoctor.core.ids.PluginIds
 import java.io.File
 
 internal class SessionReportsReflectionAdapter {
@@ -20,6 +21,6 @@ internal class SessionReportsReflectionAdapter {
     }
 
     companion object {
-        private const val SESSION_PLUGIN_ID = "session-reports"
+        private const val SESSION_PLUGIN_ID = PluginIds.SESSION_REPORTS
     }
 }

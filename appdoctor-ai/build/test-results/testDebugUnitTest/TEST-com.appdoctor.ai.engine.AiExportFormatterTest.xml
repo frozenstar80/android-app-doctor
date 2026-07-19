@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.ai.engine.AiExportFormatterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:46:10.328Z" hostname="Mac.lan" time="0.01">
+<testsuite name="com.appdoctor.ai.engine.AiExportFormatterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:47.161Z" hostname="Mac.lan" time="0.011">
   <properties/>
-  <testcase name="serializes analysis to markdown and json" classname="com.appdoctor.ai.engine.AiExportFormatterTest" time="0.01"/>
+  <testcase name="serializes analysis to markdown and json" classname="com.appdoctor.ai.engine.AiExportFormatterTest" time="0.011"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

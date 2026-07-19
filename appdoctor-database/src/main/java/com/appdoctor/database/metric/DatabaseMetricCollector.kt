@@ -1,6 +1,7 @@
 package com.appdoctor.database.metric
 
 import com.appdoctor.core.metric.MetricCollector
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.database.model.DatabaseMetric
 import com.appdoctor.database.repository.DatabaseQueryRepository
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +36,7 @@ internal class DatabaseMetricCollector(
     override fun snapshot(): DatabaseMetric = DatabaseMetric(repository.queries.value)
 
     internal companion object {
-        const val ID: String = "database"
+        const val ID: String = CollectorIds.DATABASE
         private const val STOP_TIMEOUT_MS = 5_000L
     }
 }

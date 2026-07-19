@@ -12,6 +12,7 @@ import com.appdoctor.core.plugin.AppDoctorPluginFactory
  * core), so behaviour is identical: no plugin is created when capture is disabled.
  */
 public class AppDoctorNetworkPluginFactory : AppDoctorPluginFactory {
+    override val priority: Int = 100
 
     override fun create(config: AppDoctorConfig): AppDoctorPlugin? =
         if (config.captureNetwork) AppDoctorNetworkPlugin(config) else null

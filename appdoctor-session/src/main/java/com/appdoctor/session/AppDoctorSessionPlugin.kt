@@ -1,8 +1,10 @@
 package com.appdoctor.session
 
 import com.appdoctor.core.AppDoctorConfig
+import com.appdoctor.core.ids.PluginIds
 import com.appdoctor.core.plugin.AppDoctorPlugin
 import com.appdoctor.core.plugin.PluginContext
+import com.appdoctor.session.api.SessionReportProvider
 import com.appdoctor.session.engine.SessionBuilder
 import com.appdoctor.session.engine.SessionExporter
 import com.appdoctor.session.engine.SessionMetadataProvider
@@ -14,7 +16,7 @@ import java.util.UUID
 
 public class AppDoctorSessionPlugin(
     private val config: AppDoctorConfig = AppDoctorConfig(),
-) : AppDoctorPlugin {
+) : AppDoctorPlugin, SessionReportProvider {
     override val id: String = SESSION_PLUGIN_ID
     override val title: String = "Session Reports"
 
@@ -74,7 +76,11 @@ public class AppDoctorSessionPlugin(
 
     public fun storedReports(): List<SessionReport> = manager?.storedReports().orEmpty()
 
+    override suspend fun buildReport(): SessionReport = checkNotNull(manager) {
+        "Session plugin is not installed."
+    }.generateAsync()
+
     public companion object {
-        public const val SESSION_PLUGIN_ID: String = "session-reports"
+        public const val SESSION_PLUGIN_ID: String = PluginIds.SESSION_REPORTS
     }
 }

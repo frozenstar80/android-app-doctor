@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:47:50.240Z" hostname="Mac.lan" time="0.036">
+<testsuite name="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:47.874Z" hostname="Mac.lan" time="0.059">
   <properties/>
-  <testcase name="records when enabled and assigns increasing ids" classname="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" time="0.002"/>
-  <testcase name="does not record when disabled" classname="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" time="0.001"/>
-  <testcase name="concurrent recording stays bounded and unique" classname="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" time="0.033"/>
+  <testcase name="records when enabled and assigns increasing ids" classname="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" time="0.004"/>
+  <testcase name="does not record when disabled" classname="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" time="0.0"/>
+  <testcase name="concurrent recording stays bounded and unique" classname="com.appdoctor.database.recorder.DefaultDatabaseQueryRecorderTest" time="0.054"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

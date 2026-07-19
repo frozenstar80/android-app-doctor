@@ -2,6 +2,7 @@ package com.appdoctor.compose.metric
 
 import com.appdoctor.compose.internal.runtime.ComposeRuntimeCollectorEngine
 import com.appdoctor.compose.model.ComposeRuntimeSnapshot
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.core.metric.MetricCollector
 import kotlinx.coroutines.flow.StateFlow
 
@@ -28,6 +29,6 @@ internal class ComposeMetricCollector(
     fun current(): ComposeRuntimeSnapshot = engine.data.value
 
     internal companion object {
-        const val ID: String = "compose"
+        const val ID: String = CollectorIds.COMPOSE
     }
 }

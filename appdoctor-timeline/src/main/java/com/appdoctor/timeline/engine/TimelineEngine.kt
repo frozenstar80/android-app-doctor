@@ -1,7 +1,9 @@
 package com.appdoctor.timeline.engine
 
 import com.appdoctor.core.AppDoctor
+import com.appdoctor.core.ids.PluginIds
 import com.appdoctor.core.metric.CollectorRegistry
+import com.appdoctor.diagnostics.api.DiagnosticsReadApi
 import com.appdoctor.timeline.model.RuntimeTimelineEvent
 import com.appdoctor.timeline.model.TimelineFilter
 import com.appdoctor.timeline.model.TimelineSession
@@ -83,7 +85,10 @@ public class TimelineEngine(
     }
 
     private fun diagnosticsIssues(): List<Any> {
-        val diagnosticsPlugin = AppDoctor.plugin("diagnostics") ?: return emptyList()
+        val diagnosticsPlugin = AppDoctor.plugin(PluginIds.DIAGNOSTICS) ?: return emptyList()
+        if (diagnosticsPlugin is DiagnosticsReadApi) {
+            return diagnosticsPlugin.currentIssues()
+        }
         val getter = diagnosticsPlugin.javaClass.methods.firstOrNull {
             it.name == "getIssues" && it.parameterCount == 0
         } ?: return emptyList()

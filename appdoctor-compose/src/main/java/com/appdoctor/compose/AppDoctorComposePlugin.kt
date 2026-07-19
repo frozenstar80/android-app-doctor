@@ -12,6 +12,7 @@ import com.appdoctor.compose.tracking.ComposableTracker
 import com.appdoctor.compose.tracking.InMemoryComposableTracker
 import com.appdoctor.compose.ui.ComposeTabScreen
 import com.appdoctor.core.AppDoctorConfig
+import com.appdoctor.core.ids.PluginIds
 import com.appdoctor.core.metric.Metric
 import com.appdoctor.core.metric.MetricCollector
 import com.appdoctor.core.metric.MetricCollectorProvider
@@ -125,6 +126,6 @@ public class AppDoctorComposePlugin(
     }
 
     public companion object {
-        public const val COMPOSE_PLUGIN_ID: String = "compose-inspector"
+        public const val COMPOSE_PLUGIN_ID: String = PluginIds.COMPOSE_INSPECTOR
     }
 }

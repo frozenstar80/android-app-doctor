@@ -9,6 +9,7 @@ import com.appdoctor.core.plugin.AppDoctorPluginFactory
  * `META-INF/services`. Returns `null` when [AppDoctorConfig.captureDatabase] is `false`.
  */
 public class AppDoctorDatabasePluginFactory : AppDoctorPluginFactory {
+    override val priority: Int = 100
 
     override fun create(config: AppDoctorConfig): AppDoctorPlugin? =
         if (config.captureDatabase) AppDoctorDatabasePlugin(config) else null

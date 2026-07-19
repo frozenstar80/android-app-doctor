@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.database.internal.SqlTableExtractorTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:47:49.756Z" hostname="Mac.lan" time="0.001">
+<testsuite name="com.appdoctor.database.internal.SqlTableExtractorTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:47.709Z" hostname="Mac.lan" time="0.001">
   <properties/>
   <testcase name="extracts from insert update and join" classname="com.appdoctor.database.internal.SqlTableExtractorTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>

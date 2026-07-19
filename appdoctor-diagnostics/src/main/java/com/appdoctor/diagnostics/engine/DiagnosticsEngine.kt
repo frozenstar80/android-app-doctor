@@ -1,6 +1,7 @@
 package com.appdoctor.diagnostics.engine
 
 import com.appdoctor.core.metric.CollectorRegistry
+import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.diagnostics.model.DiagnosticIssue
 import com.appdoctor.diagnostics.model.HealthReport
 import kotlinx.coroutines.CoroutineScope
@@ -58,15 +59,15 @@ public class DiagnosticsEngine(
             collector.id to collector.snapshot()
         }
 
-        MetricExtractors.memory(snapshots["memory"], now)?.let {
+        MetricExtractors.memory(snapshots[CollectorIds.MEMORY], now)?.let {
             memoryHistory.addLast(it)
             trimHistory(memoryHistory, now)
         }
-        MetricExtractors.fps(snapshots["fps"], now)?.let {
+        MetricExtractors.fps(snapshots[CollectorIds.FPS], now)?.let {
             fpsHistory.addLast(it)
             trimHistory(fpsHistory, now)
         }
-        MetricExtractors.compose(snapshots["compose"])?.let {
+        MetricExtractors.compose(snapshots[CollectorIds.COMPOSE])?.let {
             composeHistory.addLast(it)
             trimHistory(composeHistory, now)
         }
@@ -75,8 +76,8 @@ public class DiagnosticsEngine(
             nowMillis = now,
             memorySamples = memoryHistory.toList(),
             fpsSamples = fpsHistory.toList(),
-            networkSamples = MetricExtractors.network(snapshots["network"]),
-            databaseSamples = MetricExtractors.database(snapshots["database"]),
+            networkSamples = MetricExtractors.network(snapshots[CollectorIds.NETWORK]),
+            databaseSamples = MetricExtractors.database(snapshots[CollectorIds.DATABASE]),
             composeSamples = composeHistory.toList(),
         )
 

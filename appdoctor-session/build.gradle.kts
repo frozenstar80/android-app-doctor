@@ -41,6 +41,8 @@ kotlin {
 
 dependencies {
     implementation(project(":appdoctor-core"))
+    implementation(project(":appdoctor-diagnostics"))
+    implementation(project(":appdoctor-timeline"))
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)

@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml:2:13-83
-INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml:2:13-83
+ADDED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml:2:13-83
+INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml:2:13-83
 	package
-		INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml
+		INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml
 	xmlns:android
-		ADDED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml:2:23-81
+		ADDED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml:2:23-81
 uses-sdk
-INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml reason: use-sdk injection requested
-INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml
-INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml
+INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml reason: use-sdk injection requested
+INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml
+INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml
 	android:targetSdkVersion
-		INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml
+		INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml
 	android:minSdkVersion
-		INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5794341610479802800.xml
+		INJECTED from /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-timeline/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest5513203464663469162.xml

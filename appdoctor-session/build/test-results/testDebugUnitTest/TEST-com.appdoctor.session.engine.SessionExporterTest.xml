@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.session.engine.SessionExporterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:47:49.067Z" hostname="Mac.lan" time="0.076">
+<testsuite name="com.appdoctor.session.engine.SessionExporterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:31.424Z" hostname="Mac.lan" time="0.032">
   <properties/>
-  <testcase name="exports json markdown and zip" classname="com.appdoctor.session.engine.SessionExporterTest" time="0.075"/>
+  <testcase name="exports json markdown and zip" classname="com.appdoctor.session.engine.SessionExporterTest" time="0.032"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

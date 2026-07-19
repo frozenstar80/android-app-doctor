@@ -26,6 +26,9 @@ Session Reports consume existing outputs only:
 - optional analytics from compose/database plugins
 - core app/device/build/config snapshots
 
+By default reports are summary-first: they keep aggregate counts/latencies and avoid embedding
+large request/response or SQL payloads directly into the report.
+
 No collector contracts are changed. No module receives a back-reference to session reports.
 
 ## Missing-module behavior
@@ -70,6 +73,7 @@ ZIP contents:
 
 - `enableSessionReports` (default: `false`)
 - `maximumStoredReports` (default: `10`)
+- `includeFullSessionPayloads` (default: `false`)
 - `autoGenerateOnCrash` (placeholder, default: `false`)
 
 ## Limitations
