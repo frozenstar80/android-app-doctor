@@ -43,6 +43,7 @@ kotlin {
 }
 
 dependencies {
+    api(project(":appdoctor-extension"))
     api(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
 

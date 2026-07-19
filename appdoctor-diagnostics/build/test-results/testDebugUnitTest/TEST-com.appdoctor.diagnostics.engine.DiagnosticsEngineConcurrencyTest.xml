@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.diagnostics.engine.DiagnosticsEngineConcurrencyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:25.094Z" hostname="Mac.lan" time="0.258">
+<testsuite name="com.appdoctor.diagnostics.engine.DiagnosticsEngineConcurrencyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:35.106Z" hostname="Mac.lan" time="0.355">
   <properties/>
-  <testcase name="analysis runs asynchronously without collector coupling" classname="com.appdoctor.diagnostics.engine.DiagnosticsEngineConcurrencyTest" time="0.258"/>
+  <testcase name="analysis runs asynchronously without collector coupling" classname="com.appdoctor.diagnostics.engine.DiagnosticsEngineConcurrencyTest" time="0.355"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

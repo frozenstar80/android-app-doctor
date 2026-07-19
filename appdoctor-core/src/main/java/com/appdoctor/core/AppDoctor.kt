@@ -7,6 +7,10 @@ import com.appdoctor.core.internal.util.BuildTypeDetector
 import com.appdoctor.core.internal.util.Logger
 import com.appdoctor.core.metric.CollectorRegistry
 import com.appdoctor.core.plugin.AppDoctorPlugin
+import com.appdoctor.extension.Extension
+import com.appdoctor.extension.ExtensionConfiguration
+import com.appdoctor.extension.ExtensionMetadata
+import com.appdoctor.extension.ExtensionRegistry
 
 /**
  * AppDoctor — a zero-config, debug-only diagnostics overlay for Android.
@@ -53,6 +57,22 @@ public object AppDoctor {
     @JvmStatic
     @JvmOverloads
     public fun install(application: Application, config: AppDoctorConfig = AppDoctorConfig()) {
+        install(application = application, config = config, extensionConfiguration = ExtensionConfiguration())
+    }
+
+    /**
+     * Installs AppDoctor with optional Extension SDK configuration.
+     *
+     * Existing behaviour remains unchanged when [extensionConfiguration.enableExtensions] is
+     * `false` (default).
+     */
+    @AnyThread
+    @JvmStatic
+    public fun install(
+        application: Application,
+        config: AppDoctorConfig,
+        extensionConfiguration: ExtensionConfiguration,
+    ) {
         if (!shouldActivate(application, config)) {
             Logger.i("Skipping install: host is not debuggable and release override is off.")
             return
@@ -60,7 +80,7 @@ public object AppDoctor {
         val created: AppDoctorEngine
         synchronized(installLock) {
             if (engine != null) return
-            created = AppDoctorEngine(application, config)
+            created = AppDoctorEngine(application, config, extensionConfiguration)
             engine = created
         }
         created.start()
@@ -107,6 +127,29 @@ public object AppDoctor {
     }
 
     /**
+     * Registers and installs an [Extension] using deterministic lifecycle semantics.
+     */
+    @AnyThread
+    @JvmStatic
+    public fun registerExtension(extension: Extension) {
+        engine?.registerExtension(extension)
+    }
+
+    /**
+     * Enables a previously installed extension by id.
+     */
+    @AnyThread
+    @JvmStatic
+    public fun enableExtension(id: String): Boolean = engine?.enableExtension(id) == true
+
+    /**
+     * Disables a previously installed extension by id.
+     */
+    @AnyThread
+    @JvmStatic
+    public fun disableExtension(id: String): Boolean = engine?.disableExtension(id) == true
+
+    /**
      * Snapshot of currently registered plugins.
      *
      * Returns an empty list when AppDoctor is not installed.
@@ -141,6 +184,22 @@ public object AppDoctor {
     @get:JvmStatic
     public val collectors: CollectorRegistry?
         get() = engine?.collectors
+
+    /**
+     * Read-only Extension SDK registry, or `null` when AppDoctor is inactive.
+     */
+    @get:AnyThread
+    @get:JvmStatic
+    public val extensionRegistry: ExtensionRegistry?
+        get() = engine?.extensions
+
+    /**
+     * Snapshot of installed extension metadata.
+     */
+    @get:AnyThread
+    @get:JvmStatic
+    public val installedExtensions: List<ExtensionMetadata>
+        get() = extensionRegistry?.installed.orEmpty()
 
     private fun shouldActivate(application: Application, config: AppDoctorConfig): Boolean =
         config.enabledInReleaseBuilds || BuildTypeDetector.isDebuggable(application)

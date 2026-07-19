@@ -9,7 +9,17 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/appdoctor-ai" />
+            <option value="$PROJECT_DIR$/appdoctor-compose" />
+            <option value="$PROJECT_DIR$/appdoctor-core" />
+            <option value="$PROJECT_DIR$/appdoctor-database" />
+            <option value="$PROJECT_DIR$/appdoctor-diagnostics" />
+            <option value="$PROJECT_DIR$/appdoctor-extension" />
+            <option value="$PROJECT_DIR$/appdoctor-network" />
+            <option value="$PROJECT_DIR$/appdoctor-session" />
+            <option value="$PROJECT_DIR$/appdoctor-timeline" />
+            <option value="$PROJECT_DIR$/appdoctor-ui" />
+            <option value="$PROJECT_DIR$/sample-app" />
           </set>
         </option>
       </GradleProjectSettings>

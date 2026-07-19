@@ -10,6 +10,11 @@ import com.appdoctor.core.info.DeviceInfoProvider
 import com.appdoctor.core.ids.CollectorIds
 import com.appdoctor.core.internal.collector.DefaultCollectorRegistry
 import com.appdoctor.core.internal.collector.MonitorCollector
+import com.appdoctor.core.internal.extension.AppDoctorExtensionRuntime
+import com.appdoctor.core.internal.extension.CoreExtensionContext
+import com.appdoctor.core.internal.extension.CoreExtensionLogger
+import com.appdoctor.core.internal.extension.DefaultExtensionValidator
+import com.appdoctor.core.internal.extension.ExtensionServiceKeys
 import com.appdoctor.core.internal.lifecycle.ActivityTracker
 import com.appdoctor.core.internal.util.Logger
 import com.appdoctor.core.metric.CollectorRegistry
@@ -25,6 +30,11 @@ import com.appdoctor.core.overlay.OverlayFactory
 import com.appdoctor.core.plugin.AppDoctorPlugin
 import com.appdoctor.core.plugin.AppDoctorPluginFactory
 import com.appdoctor.core.plugin.PluginContext
+import com.appdoctor.extension.Extension
+import com.appdoctor.extension.ExtensionConfiguration
+import com.appdoctor.extension.ExtensionFactory
+import com.appdoctor.extension.ExtensionRegistry
+import com.appdoctor.extension.ExtensionVersion
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -45,6 +55,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 internal class AppDoctorEngine(
     private val application: Application,
     private val config: AppDoctorConfig,
+    private val extensionConfiguration: ExtensionConfiguration,
 ) : MetricsProvider {
 
     /** Background scope for polling monitors and plugin work. */
@@ -95,6 +106,32 @@ internal class AppDoctorEngine(
     /** Read-only registry of all metric collectors (core monitors + plugin-provided). */
     val collectors: CollectorRegistry get() = collectorRegistry
 
+    private val extensionContext = CoreExtensionContext(
+        applicationContext = application,
+        sdkVersion = APPDOCTOR_SDK_VERSION,
+        configuration = extensionConfiguration,
+        logger = CoreExtensionLogger(
+            debugFn = Logger::i,
+            infoFn = Logger::i,
+            warnFn = Logger::w,
+            errorFn = Logger::e,
+        ),
+        services = mapOf(
+            ExtensionServiceKeys.APPLICATION to application,
+            ExtensionServiceKeys.METRICS_PROVIDER to this,
+            ExtensionServiceKeys.COLLECTOR_REGISTRY to collectorRegistry,
+        ),
+    )
+    private val extensionRuntime = AppDoctorExtensionRuntime(
+        context = extensionContext,
+        sdkVersion = APPDOCTOR_SDK_VERSION,
+        configuration = extensionConfiguration,
+        validator = DefaultExtensionValidator(),
+    )
+
+    /** Read-only registry of installed extensions. */
+    val extensions: ExtensionRegistry get() = extensionRuntime
+
     private val pluginContext: PluginContext = object : PluginContext {
         override val application: Application get() = this@AppDoctorEngine.application
         override val metrics: MetricsProvider get() = this@AppDoctorEngine
@@ -110,6 +147,8 @@ internal class AppDoctorEngine(
         registerCoreCollectors()
         config.plugins.forEach(::registerPlugin)
         loadBuiltinPlugins().forEach(::registerPlugin)
+        loadConfiguredExtensions()
+        loadServiceLoaderExtensions()
         if (config.startEnabled) enable()
         Logger.i("Installed (overlay=${overlay != null}, startEnabled=${config.startEnabled}).")
     }
@@ -121,6 +160,7 @@ internal class AppDoctorEngine(
         }
         reconcileOverlay(enabled = true)
         plugins.forEach { runPluginCallback { it.onEnable() } }
+        extensionRuntime.enableAll()
     }
 
     fun disable() {
@@ -129,6 +169,7 @@ internal class AppDoctorEngine(
             isEnabled = false
         }
         reconcileOverlay(enabled = false)
+        extensionRuntime.disableAll()
         plugins.forEach { runPluginCallback { it.onDisable() } }
     }
 
@@ -144,8 +185,28 @@ internal class AppDoctorEngine(
 
     fun pluginsSnapshot(): List<AppDoctorPlugin> = plugins.toList()
 
+    fun registerExtension(extension: Extension) {
+        if (!extensionConfiguration.enableExtensions) {
+            Logger.i("Skipping extension registration: extensions are disabled.")
+            return
+        }
+        val metadata = runCatching { extensionRuntime.install(extension) }
+            .getOrElse {
+                Logger.w("Failed to register extension '${extension.metadata.id}'.", it)
+                return
+            }
+        if (isEnabled) {
+            extensionRuntime.enable(metadata.id)
+        }
+    }
+
+    fun enableExtension(id: String): Boolean = extensionRuntime.enable(id)
+
+    fun disableExtension(id: String): Boolean = extensionRuntime.disable(id)
+
     /** Tear everything down. Reserved for a future public `uninstall()`. */
     fun shutdown() {
+        extensionRuntime.destroyAll()
         application.unregisterActivityLifecycleCallbacks(activityTracker)
         mainScope.launch { coordinator.shutdown() }
         collectorRegistry.clear()
@@ -216,5 +277,56 @@ internal class AppDoctorEngine(
         null
     }
 
-    private companion object
+    private companion object {
+        private val APPDOCTOR_SDK_VERSION: ExtensionVersion = ExtensionVersion("10.0.0")
+    }
+
+    private fun loadConfiguredExtensions() {
+        if (!extensionConfiguration.enableExtensions) return
+        val strategy = extensionConfiguration.extensionLoadingStrategy
+        if (
+            strategy == ExtensionConfiguration.LoadingStrategy.SERVICE_LOADER ||
+            strategy == ExtensionConfiguration.LoadingStrategy.PACKAGE_MANAGER
+        ) {
+            return
+        }
+
+        extensionConfiguration.dependencyInjectedExtensions.forEach(::registerExtension)
+        extensionConfiguration.dependencyInjectedFactories
+            .sortedWith(compareBy<ExtensionFactory>({ it.priority }, { it.id }))
+            .forEach { factory ->
+                val extension = runCatching { factory.create(extensionContext) }
+                    .getOrElse {
+                        Logger.w("Failed to create extension from injected factory '${factory.id}'.", it)
+                        null
+                    }
+                if (extension != null) registerExtension(extension)
+            }
+    }
+
+    private fun loadServiceLoaderExtensions() {
+        if (!extensionConfiguration.enableExtensions) return
+        val strategy = extensionConfiguration.extensionLoadingStrategy
+        if (
+            strategy == ExtensionConfiguration.LoadingStrategy.MANUAL ||
+            strategy == ExtensionConfiguration.LoadingStrategy.DEPENDENCY_INJECTION
+        ) {
+            return
+        }
+        try {
+            ServiceLoader.load(ExtensionFactory::class.java, ExtensionFactory::class.java.classLoader)
+                .toList()
+                .sortedWith(compareBy<ExtensionFactory>({ it.priority }, { it.id }))
+                .forEach { factory ->
+                    val extension = runCatching { factory.create(extensionContext) }
+                        .getOrElse {
+                            Logger.w("Failed to create extension from factory '${factory.id}'.", it)
+                            null
+                        }
+                    if (extension != null) registerExtension(extension)
+                }
+        } catch (t: Throwable) {
+            Logger.w("Extension ServiceLoader discovery failed.", t)
+        }
+    }
 }

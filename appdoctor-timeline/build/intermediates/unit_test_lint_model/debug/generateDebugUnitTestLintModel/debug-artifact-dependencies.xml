@@ -1,12 +1,15 @@
 <dependencies>
   <compile
-      roots=":@@:appdoctor-timeline::debug,:@@:appdoctor-core::debug,org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0@jar,org.jetbrains.kotlin:kotlin-stdlib:2.2.20@jar,junit:junit:4.13.2@jar,org.jetbrains:annotations:23.0.0@jar,org.hamcrest:hamcrest-core:1.3@jar">
+      roots=":@@:appdoctor-timeline::debug,:@@:appdoctor-core::debug,:@@:appdoctor-diagnostics::debug,org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0@jar,:@@:appdoctor-extension::debug,org.jetbrains.kotlin:kotlin-stdlib:2.2.20@jar,junit:junit:4.13.2@jar,org.jetbrains:annotations:23.0.0@jar,org.hamcrest:hamcrest-core:1.3@jar">
     <dependency
         name=":@@:appdoctor-timeline::debug"
         simpleName="AppDoctor:appdoctor-timeline"/>
     <dependency
         name=":@@:appdoctor-core::debug"
         simpleName="AppDoctor:appdoctor-core"/>
+    <dependency
+        name=":@@:appdoctor-diagnostics::debug"
+        simpleName="AppDoctor:appdoctor-diagnostics"/>
     <dependency
         name="org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.11.0@jar"
         simpleName="org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm"/>
@@ -16,6 +19,9 @@
     <dependency
         name="org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0@jar"
         simpleName="org.jetbrains.kotlinx:kotlinx-coroutines-android"/>
+    <dependency
+        name=":@@:appdoctor-extension::debug"
+        simpleName="AppDoctor:appdoctor-extension"/>
     <dependency
         name="org.jetbrains.kotlin:kotlin-stdlib:2.2.20@jar"
         simpleName="org.jetbrains.kotlin:kotlin-stdlib"/>
@@ -30,13 +36,16 @@
         simpleName="org.hamcrest:hamcrest-core"/>
   </compile>
   <package
-      roots=":@@:appdoctor-timeline::debug,junit:junit:4.13.2@jar,:@@:appdoctor-core::debug,androidx.core:core-ktx:1.19.0@aar,androidx.core:core:1.19.0@aar,androidx.lifecycle:lifecycle-runtime:2.6.2@aar,androidx.lifecycle:lifecycle-common:2.6.2@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0@jar,androidx.annotation:annotation-experimental:1.4.1@aar,androidx.core:core-viewtree:1.0.0@aar,androidx.interpolator:interpolator:1.0.0@aar,androidx.profileinstaller:profileinstaller:1.3.0@aar,androidx.startup:startup-runtime:1.1.1@aar,androidx.tracing:tracing:1.2.0@aar,androidx.versionedparcelable:versionedparcelable:1.1.1@aar,androidx.collection:collection-jvm:1.4.2@jar,androidx.arch.core:core-runtime:2.2.0@aar,androidx.arch.core:core-common:2.2.0@jar,androidx.concurrent:concurrent-futures:1.1.0@jar,androidx.annotation:annotation-jvm:1.10.0@jar,org.jetbrains.kotlin:kotlin-stdlib:2.2.20@jar,org.hamcrest:hamcrest-core:1.3@jar,org.jetbrains:annotations:23.0.0@jar,com.google.guava:listenablefuture:1.0@jar,org.jspecify:jspecify:1.0.0@jar">
+      roots=":@@:appdoctor-timeline::debug,junit:junit:4.13.2@jar,:@@:appdoctor-diagnostics::debug,:@@:appdoctor-core::debug,androidx.core:core-ktx:1.19.0@aar,androidx.core:core:1.19.0@aar,androidx.lifecycle:lifecycle-runtime:2.6.2@aar,androidx.lifecycle:lifecycle-common:2.6.2@jar,org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.11.0@jar,org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0@jar,:@@:appdoctor-extension::debug,androidx.annotation:annotation-experimental:1.4.1@aar,androidx.core:core-viewtree:1.0.0@aar,androidx.interpolator:interpolator:1.0.0@aar,androidx.profileinstaller:profileinstaller:1.3.0@aar,androidx.startup:startup-runtime:1.1.1@aar,androidx.tracing:tracing:1.2.0@aar,androidx.versionedparcelable:versionedparcelable:1.1.1@aar,androidx.collection:collection-jvm:1.4.2@jar,androidx.arch.core:core-runtime:2.2.0@aar,androidx.arch.core:core-common:2.2.0@jar,androidx.concurrent:concurrent-futures:1.1.0@jar,androidx.annotation:annotation-jvm:1.10.0@jar,org.jetbrains.kotlin:kotlin-stdlib:2.2.20@jar,org.hamcrest:hamcrest-core:1.3@jar,org.jetbrains:annotations:23.0.0@jar,com.google.guava:listenablefuture:1.0@jar,org.jspecify:jspecify:1.0.0@jar">
     <dependency
         name=":@@:appdoctor-timeline::debug"
         simpleName="AppDoctor:appdoctor-timeline"/>
     <dependency
         name="junit:junit:4.13.2@jar"
         simpleName="junit:junit"/>
+    <dependency
+        name=":@@:appdoctor-diagnostics::debug"
+        simpleName="AppDoctor:appdoctor-diagnostics"/>
     <dependency
         name=":@@:appdoctor-core::debug"
         simpleName="AppDoctor:appdoctor-core"/>
@@ -61,6 +70,9 @@
     <dependency
         name="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0@jar"
         simpleName="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm"/>
+    <dependency
+        name=":@@:appdoctor-extension::debug"
+        simpleName="AppDoctor:appdoctor-extension"/>
     <dependency
         name="androidx.annotation:annotation-experimental:1.4.1@aar"
         simpleName="androidx.annotation:annotation-experimental"/>

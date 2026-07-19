@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.ai.AiProviderAbstractionTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:46.886Z" hostname="Mac.lan" time="0.249">
+<testsuite name="com.appdoctor.ai.AiProviderAbstractionTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:51.161Z" hostname="Mac.lan" time="0.269">
   <properties/>
-  <testcase name="engine works with any AiProvider implementation" classname="com.appdoctor.ai.AiProviderAbstractionTest" time="0.249"/>
+  <testcase name="engine works with any AiProvider implementation" classname="com.appdoctor.ai.AiProviderAbstractionTest" time="0.269"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -38,6 +38,7 @@ import com.appdoctor.core.monitor.memory.MemoryInfo
 import com.appdoctor.ui.dashboard.components.InfoRow
 import com.appdoctor.ui.dashboard.components.MetricBar
 import com.appdoctor.ui.dashboard.components.SectionCard
+import com.appdoctor.ui.dashboard.extensions.ExtensionsTabScreen
 import com.appdoctor.ui.dashboard.health.HealthTabScreen
 import com.appdoctor.ui.dashboard.plugin.DashboardTabPlugin
 import com.appdoctor.ui.dashboard.timeline.TimelineTabScreen
@@ -65,6 +66,7 @@ internal fun DashboardScreen(
             add(TabSpec("overview", "Overview", null))
             add(TabSpec("health", "Health", null))
             add(TabSpec("timeline", "Timeline", null))
+            add(TabSpec("extensions", "Extensions", null))
             tabPlugins.forEach { plugin ->
                 add(TabSpec(plugin.tabKey, plugin.tabTitle, plugin))
             }
@@ -103,6 +105,11 @@ internal fun DashboardScreen(
                     onJumpToIssue = {
                         selectedTabIndex = allTabs.indexOfFirst { it.key == "health" }.coerceAtLeast(0)
                     },
+                )
+                "extensions" -> ExtensionsTabScreen(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                 )
                 else -> selected.plugin?.DashboardTabContent(
                     modifier = Modifier

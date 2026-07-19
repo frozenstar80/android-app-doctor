@@ -1,0 +1,9 @@
+com.appdoctor.extension.appdoctor-extension-pngs-0 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/build/generated/res/pngs/debug
+com.appdoctor.extension.appdoctor-extension-updated_navigation_xml-1 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/build/generated/updated_navigation_xml/debug
+com.appdoctor.extension.appdoctor-extension-mergeDebugResources-2 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
+com.appdoctor.extension.appdoctor-extension-mergeDebugResources-3 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+com.appdoctor.extension.appdoctor-extension-debug-4 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/build/intermediates/merged_res/debug/mergeDebugResources
+com.appdoctor.extension.appdoctor-extension-debug-5 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/build/intermediates/packaged_res/debug/packageDebugResources
+com.appdoctor.extension.appdoctor-extension-debug-6 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/src/debug/res
+com.appdoctor.extension.appdoctor-extension-main-7 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-extension/src/main/res
+gradleHome-0 /Users/tanmaysingh/.gradle

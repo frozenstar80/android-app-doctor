@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.session.engine.SessionRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:31.461Z" hostname="Mac.lan" time="0.0">
+<testsuite name="com.appdoctor.session.engine.SessionRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:40.701Z" hostname="Mac.lan" time="0.001">
   <properties/>
-  <testcase name="keeps bounded newest-first reports" classname="com.appdoctor.session.engine.SessionRepositoryTest" time="0.0"/>
+  <testcase name="keeps bounded newest-first reports" classname="com.appdoctor.session.engine.SessionRepositoryTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

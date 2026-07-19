@@ -24,6 +24,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "AppDoctor"
 include(":appdoctor-core")
+include(":appdoctor-extension")
 include(":appdoctor-ui")
 include(":appdoctor-network")
 include(":appdoctor-database")

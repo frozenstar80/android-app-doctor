@@ -34,6 +34,7 @@ class MyApp : Application() {
 | 🕒 | **Timeline Engine** | Optional observational event stream (`appdoctor-timeline`) that correlates collector and diagnostics activity into a chronological session timeline with filtering/search/export. |
 | 🧾 | **Session Reports** | Optional local report runtime (`appdoctor-session`) that aggregates metadata, timeline, diagnostics, health, collector summaries and analytics into JSON/Markdown/ZIP exports. |
 | 🤖 | **AI Analysis** | Optional `appdoctor-ai` module that consumes **only `SessionReport`**, applies sanitization/redaction hooks, supports multiple providers (`openai`/`gemini`/`local`/`custom`), and renders an AI Analysis tab with history/cache/export. |
+| 🧩 | **Extension SDK** | Optional `appdoctor-extension` contracts + runtime support to install third-party extensions via ServiceLoader/manual/DI with deterministic lifecycle and compatibility validation. |
 | 🔌 | **Programmatic control** | `enable()`, `disable()`, `isEnabled()`. |
 | 🚫 | **Release‑safe** | Complete **no‑op** in non‑debuggable builds — no lifecycle callbacks, monitors, or overlay are ever created. |
 
@@ -86,7 +87,8 @@ flowchart TD
 - **Lazy monitors = minimal CPU.** Each monitor is a cold flow shared with `stateIn(scope, WhileSubscribed(), …)`. Polling and the `Choreographer` callback only run **while the dashboard is open**. An idle app pays nothing.
 - **Thread‑safe & lifecycle‑aware.** The public facade is safe to call from any thread; the dashboard uses `collectAsStateWithLifecycle` so metrics stop when it leaves the foreground.
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and the full extension‑point design.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and
+[`docs/EXTENSIONS.md`](docs/EXTENSIONS.md) for Extension SDK architecture, lifecycle, validation and publishing.
 
 ### Modules
 
@@ -101,6 +103,7 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and the ful
 | **`appdoctor-timeline`** | Android library | Optional observational timeline runtime: event capture, grouping, filtering/search, JSON/Markdown export. | ❌ |
 | **`appdoctor-session`** | Android library | Optional local session report runtime: aggregation + export (`JSON`/`Markdown`/`ZIP`) + bounded report storage. | ❌ |
 | **`appdoctor-ai`** | Android library | Optional AI analysis runtime: `SessionReport`-only input, sanitization pipeline, provider abstraction, cache/history/export, AI dashboard tab. | ✅ |
+| **`appdoctor-extension`** | Android library | Stable Extension SDK contracts (no runtime logic) for external extension projects. | ❌ |
 | **`sample-app`** | Android app | Demonstrates the one‑line integration. | ✅ |
 
 ---
@@ -120,6 +123,7 @@ dependencies {
     debugImplementation(project(":appdoctor-timeline")) // Optional timeline engine + Timeline tab data
     debugImplementation(project(":appdoctor-session")) // Optional local session report generation/export
     debugImplementation(project(":appdoctor-ai")) // Optional AI analysis over SessionReport (manual trigger only)
+    implementation(project(":appdoctor-extension")) // Optional Extension SDK contracts
 }
 ```
 
@@ -240,6 +244,12 @@ AppDoctor.install(
         aiCacheSize = 20,                // max cached/history analyses
         aiLocalOnly = false,             // block external providers when true
     ),
+    extensionConfiguration = ExtensionConfiguration(
+        enableExtensions = true,
+        allowThirdPartyExtensions = true,
+        strictCompatibilityChecking = true,
+        extensionLoadingStrategy = ExtensionConfiguration.LoadingStrategy.AUTOMATIC,
+    ),
 )
 ```
 
@@ -342,6 +352,7 @@ The [`sample-app`](sample-app) module demonstrates the full integration:
 - [x] **Phase 4:** Compose runtime inspector ✅ — recomposition/frame metrics, opt-in tracking + optional analytics.
 - [x] **Phase 5:** AppDoctor Intelligence ✅ — optional diagnostics module, deterministic health scoring, issue engine, confidence and Health dashboard tab.
 - [x] **Phase 6:** Timeline Engine ✅ — optional observational session timeline with filtering/search/grouping/export.
+- [x] **Phase 10:** Extension SDK ✅ — optional `appdoctor-extension` contracts, deterministic extension lifecycle, compatibility/validation, and dashboard Extensions tab.
 
 ---
 

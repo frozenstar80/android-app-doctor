@@ -45,7 +45,8 @@ are, and where future features plug in. It complements the high‑level overview
 ```
 
 The `appdoctor-network`, `appdoctor-database`, `appdoctor-compose`,
-`appdoctor-diagnostics`, `appdoctor-timeline`, `appdoctor-session`, and `appdoctor-ai` modules are all
+`appdoctor-diagnostics`, `appdoctor-timeline`, `appdoctor-session`, `appdoctor-ai`, and
+`appdoctor-extension` modules are all
 debug-only optional modules discovered via `ServiceLoader`; none requires any
 `appdoctor-core` change.
 
@@ -205,6 +206,10 @@ modifying core:
   provider calls, caches by session id, and exports local JSON/Markdown analyses.
 - 🧩 **Plugin System** — third‑party plugins discovered via the same SPI (and, later,
   `ServiceLoader`/manifest metadata) so they need no core changes at all.
+- 🧩 **Extension SDK (Phase 10)** — stable public contracts in `appdoctor-extension` plus
+  optional runtime loading/validation in core (ServiceLoader/manual/DI), deterministic
+  lifecycle (`install → initialize → enable → disable → unload → destroy`), and
+  compatibility/security checks before loading.
 
 The dashboard is intentionally sectioned so a future `PluginSection` can render each
 registered plugin's `title` + content with no structural change.

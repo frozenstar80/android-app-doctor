@@ -3,20 +3,20 @@
 3    package="com.appdoctor.network.test" >
 4
 5    <uses-sdk
-5-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:5:5-74
+5-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:5:5-74
 6        android:minSdkVersion="24"
-6-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:5:15-41
+6-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:5:15-41
 7        android:targetSdkVersion="37" />
-7-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:5:42-71
+7-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:5:42-71
 8
 9    <instrumentation
-9-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:9:5-11:76
+9-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:9:5-11:76
 10        android:name="androidx.test.runner.AndroidJUnitRunner"
-10-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:9:22-76
+10-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:9:22-76
 11        android:label="Tests for com.appdoctor.network.test"
-11-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:11:22-74
+11-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:11:22-74
 12        android:targetPackage="com.appdoctor.network.test" />
-12-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:10:22-72
+12-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:10:22-72
 13
 14    <permission
 14-->[androidx.core:core:1.19.0] /Users/tanmaysingh/.gradle/caches/9.4.1/transforms/4c3361826ba648578a0047b8e9b99d78/transformed/core-1.19.0/AndroidManifest.xml:22:5-24:47
@@ -30,11 +30,11 @@
 18-->[androidx.core:core:1.19.0] /Users/tanmaysingh/.gradle/caches/9.4.1/transforms/4c3361826ba648578a0047b8e9b99d78/transformed/core-1.19.0/AndroidManifest.xml:26:22-94
 19
 20    <application
-20-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:7:5-46
+20-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:7:5-46
 21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 21-->[androidx.core:core:1.19.0] /Users/tanmaysingh/.gradle/caches/9.4.1/transforms/4c3361826ba648578a0047b8e9b99d78/transformed/core-1.19.0/AndroidManifest.xml:28:18-86
 22        android:debuggable="true" >
-22-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest12973254604139408375.xml:7:18-43
+22-->/Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-network/build/intermediates/tmp/manifest/test/debug/tempFile1ProcessTestManifest13185343012795634903.xml:7:18-43
 23        <!--
 24            Dashboard host. Declared by the library so consumers do not need any
 25            manifest changes. Not exported: it can only be launched from within

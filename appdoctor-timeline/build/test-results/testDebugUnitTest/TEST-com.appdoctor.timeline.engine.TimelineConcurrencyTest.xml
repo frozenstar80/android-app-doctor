@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.timeline.engine.TimelineConcurrencyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:13:28.078Z" hostname="Mac.lan" time="0.12">
+<testsuite name="com.appdoctor.timeline.engine.TimelineConcurrencyTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T07:28:37.400Z" hostname="Mac.lan" time="0.142">
   <properties/>
-  <testcase name="repository append is thread-safe" classname="com.appdoctor.timeline.engine.TimelineConcurrencyTest" time="0.114"/>
+  <testcase name="repository append is thread-safe" classname="com.appdoctor.timeline.engine.TimelineConcurrencyTest" time="0.138"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
