@@ -87,8 +87,9 @@ flowchart TD
 - **Lazy monitors = minimal CPU.** Each monitor is a cold flow shared with `stateIn(scope, WhileSubscribed(), …)`. Polling and the `Choreographer` callback only run **while the dashboard is open**. An idle app pays nothing.
 - **Thread‑safe & lifecycle‑aware.** The public facade is safe to call from any thread; the dashboard uses `collectAsStateWithLifecycle` so metrics stop when it leaves the foreground.
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and
-[`docs/EXTENSIONS.md`](docs/EXTENSIONS.md) for Extension SDK architecture, lifecycle, validation and publishing.
+See [`docs/Architecture.md`](docs/Architecture.md) for a deeper dive,
+[`docs/Collectors.md`](docs/Collectors.md) for collector modules, and
+[`docs/Extensions.md`](docs/Extensions.md) for Extension SDK architecture, lifecycle, validation and publishing.
 
 ### Modules
 
@@ -175,7 +176,7 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
     .build()
 ```
 
-Opt into runtime analytics with `AppDoctorConfig(enableDatabaseAnalytics = true)`. See [`docs/DATABASE.md`](docs/DATABASE.md).
+Opt into runtime analytics with `AppDoctorConfig(enableDatabaseAnalytics = true)`. See [`docs/Collectors.md`](docs/Collectors.md).
 
 ### Compose runtime inspection
 
@@ -192,11 +193,11 @@ fun ProductCard(product: Product) {
 }
 ```
 
-Opt into aggregate analytics with `AppDoctorConfig(enableComposeAnalytics = true)`. See [`docs/COMPOSE.md`](docs/COMPOSE.md).
+Opt into aggregate analytics with `AppDoctorConfig(enableComposeAnalytics = true)`. See [`docs/Collectors.md`](docs/Collectors.md).
 
 Session reports are disabled by default; enable with
 `AppDoctorConfig(enableSessionReports = true)`. See
-[`docs/SESSION_REPORTS.md`](docs/SESSION_REPORTS.md).
+[`docs/SessionReports.md`](docs/SessionReports.md).
 
 AI analysis is disabled by default; enable with `AppDoctorConfig(enableAi = true)` and keep
 `aiProvider` unset to run in offline/local configuration mode. See [`docs/AI.md`](docs/AI.md).

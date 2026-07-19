@@ -2,6 +2,11 @@ package com.appdoctor.ai
 
 import com.appdoctor.core.AppDoctorConfig
 
+/**
+ * Normalized AI runtime configuration derived from [AppDoctorConfig].
+ *
+ * Used by AI runtime components to avoid repeatedly parsing or coercing host configuration.
+ */
 public data class AiConfiguration(
     public val enableAi: Boolean,
     public val provider: String?,
@@ -14,9 +19,18 @@ public data class AiConfiguration(
     public val cacheSize: Int,
     public val localOnly: Boolean,
 ) {
+    /**
+     * Indicates whether a concrete provider id is configured.
+     */
     public val providerConfigured: Boolean get() = !provider.isNullOrBlank()
 
     public companion object {
+        /**
+         * Builds a normalized configuration snapshot from [config].
+         *
+         * @param config host AppDoctor configuration.
+         * @return validated and clamped AI configuration.
+         */
         public fun from(config: AppDoctorConfig): AiConfiguration = AiConfiguration(
             enableAi = config.enableAi,
             provider = config.aiProvider?.trim()?.lowercase(),

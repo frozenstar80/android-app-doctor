@@ -1,5 +1,11 @@
 package com.appdoctor.ai
 
+/**
+ * Structured AI interpretation of a [com.appdoctor.session.model.SessionReport].
+ *
+ * This model is deterministic from the SDK perspective: AppDoctor only stores returned text
+ * sections and does not mutate host application state.
+ */
 public data class AiAnalysis(
     public val executiveSummary: String,
     public val performanceFindings: List<String>,
