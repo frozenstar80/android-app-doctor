@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.appdoctor.ai.engine.AiErrorHandlingTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:46:10.324Z" hostname="Mac.lan" time="0.003">
+  <properties/>
+  <testcase name="returns configuration error when provider is missing" classname="com.appdoctor.ai.engine.AiErrorHandlingTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

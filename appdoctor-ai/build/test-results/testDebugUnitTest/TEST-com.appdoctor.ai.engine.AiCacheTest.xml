@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.appdoctor.ai.engine.AiCacheTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:46:10.322Z" hostname="Mac.lan" time="0.001">
+  <properties/>
+  <testcase name="evicts least recently used entries" classname="com.appdoctor.ai.engine.AiCacheTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

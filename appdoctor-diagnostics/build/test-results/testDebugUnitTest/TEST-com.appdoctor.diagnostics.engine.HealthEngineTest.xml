@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.diagnostics.engine.HealthEngineTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-07-19T04:40:17.556Z" hostname="MacBook-Air.local" time="0.001">
+<testsuite name="com.appdoctor.diagnostics.engine.HealthEngineTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:47:49.878Z" hostname="Mac.lan" time="0.003">
   <properties/>
-  <testcase name="problematic metrics lower score" classname="com.appdoctor.diagnostics.engine.HealthEngineTest" time="0.0"/>
-  <testcase name="healthy metrics keep high score" classname="com.appdoctor.diagnostics.engine.HealthEngineTest" time="0.0"/>
+  <testcase name="problematic metrics lower score" classname="com.appdoctor.diagnostics.engine.HealthEngineTest" time="0.002"/>
+  <testcase name="healthy metrics keep high score" classname="com.appdoctor.diagnostics.engine.HealthEngineTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

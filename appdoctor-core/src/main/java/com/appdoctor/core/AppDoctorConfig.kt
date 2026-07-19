@@ -61,6 +61,18 @@ import com.appdoctor.core.plugin.AppDoctorPlugin
  * @property maximumStoredReports max generated session reports retained in-memory by the
  *   session module repository.
  * @property autoGenerateOnCrash placeholder for future crash-triggered auto-generation.
+ * @property enableAi enables automatic installation of the optional AI analysis module found
+ *   on the classpath (`appdoctor-ai`).
+ * @property aiProvider provider id for `appdoctor-ai` (`openai`, `gemini`, `local`, `custom`).
+ * @property aiApiKey optional API key used by external providers. Not required for local mode.
+ * @property aiBaseUrl optional provider endpoint override.
+ * @property aiModel optional provider model override.
+ * @property aiTemperature response creativity (`0.0..2.0`) for providers that support it.
+ * @property aiTimeoutMillis request timeout for external providers.
+ * @property aiCacheEnabled whether `appdoctor-ai` should cache analyses by session id.
+ * @property aiCacheSize max number of cached analyses retained in-memory by `appdoctor-ai`.
+ * @property aiLocalOnly when true, `appdoctor-ai` refuses external providers and only allows
+ *   local analysis.
  */
 public data class AppDoctorConfig(
     public val startEnabled: Boolean = true,
@@ -91,6 +103,16 @@ public data class AppDoctorConfig(
     public val enableSessionReports: Boolean = false,
     public val maximumStoredReports: Int = DEFAULT_MAXIMUM_STORED_REPORTS,
     public val autoGenerateOnCrash: Boolean = false,
+    public val enableAi: Boolean = false,
+    public val aiProvider: String? = null,
+    public val aiApiKey: String? = null,
+    public val aiBaseUrl: String? = null,
+    public val aiModel: String? = null,
+    public val aiTemperature: Double = DEFAULT_AI_TEMPERATURE,
+    public val aiTimeoutMillis: Long = DEFAULT_AI_TIMEOUT_MS,
+    public val aiCacheEnabled: Boolean = true,
+    public val aiCacheSize: Int = DEFAULT_AI_CACHE_SIZE,
+    public val aiLocalOnly: Boolean = false,
 ) {
     public companion object {
         /** Default sample interval (1s) for memory & CPU monitors. */
@@ -117,5 +139,11 @@ public data class AppDoctorConfig(
         public const val DEFAULT_TIMELINE_GROUPING_WINDOW_MS: Long = 2_000L
         /** Default max generated reports retained in-memory by session reports. */
         public const val DEFAULT_MAXIMUM_STORED_REPORTS: Int = 10
+        /** Default AI generation temperature. */
+        public const val DEFAULT_AI_TEMPERATURE: Double = 0.2
+        /** Default AI external request timeout. */
+        public const val DEFAULT_AI_TIMEOUT_MS: Long = 20_000L
+        /** Default max analyses retained in AI cache. */
+        public const val DEFAULT_AI_CACHE_SIZE: Int = 20
     }
 }

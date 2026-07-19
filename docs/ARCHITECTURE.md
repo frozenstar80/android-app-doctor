@@ -31,7 +31,7 @@ are, and where future features plug in. It complements the high‑level overview
                 ▼                                 ▼
 ┌───────────────────────────────┐   ┌────────────────────────────────────┐
 │ appdoctor-core  (library)     │   │ appdoctor-ui / -network / -database  │
-│  • AppDoctor (facade)         │   │    / -compose / -diagnostics / -timeline / -session │
+│  • AppDoctor (facade)         │   │    / -compose / -diagnostics / -timeline / -session / -ai │
 │  • AppDoctorEngine            │◀──┤  • Compose overlay + dashboard      │
 │  • ActivityTracker            │   │  • Network tab plugin + interceptor │
 │  • OverlayCoordinator         │   │  • Database tab plugin + SQLite wrap │
@@ -45,8 +45,8 @@ are, and where future features plug in. It complements the high‑level overview
 ```
 
 The `appdoctor-network`, `appdoctor-database`, `appdoctor-compose`,
-`appdoctor-diagnostics`, `appdoctor-timeline`, and `appdoctor-session` modules are all
-debug-only collector modules discovered via `ServiceLoader`; none requires any
+`appdoctor-diagnostics`, `appdoctor-timeline`, `appdoctor-session`, and `appdoctor-ai` modules are all
+debug-only optional modules discovered via `ServiceLoader`; none requires any
 `appdoctor-core` change.
 
 - **`appdoctor-core`** compiles with `explicitApi()` and depends only on `kotlinx‑coroutines`
@@ -200,6 +200,9 @@ modifying core:
 - 🧾 **Session Reports** — delivered in `appdoctor-session`: a pure aggregation layer that
   asynchronously samples collector snapshots, consumes optional timeline/diagnostics outputs,
   builds session metadata + summaries, and exports local JSON/Markdown/ZIP reports.
+- 🤖 **AI Analysis** — delivered in `appdoctor-ai`: a pure `SessionReport`-consumer module
+  that never touches collectors directly, applies sanitization/redaction before optional
+  provider calls, caches by session id, and exports local JSON/Markdown analyses.
 - 🧩 **Plugin System** — third‑party plugins discovered via the same SPI (and, later,
   `ServiceLoader`/manifest metadata) so they need no core changes at all.
 
@@ -318,4 +321,13 @@ appdoctor-session/…/com/appdoctor/session/
 ├── SessionManager.kt                  generate/save/share/export facade
 ├── model/                             SessionReport + metadata/sections
 └── engine/                            recorder, builder, formatter, exporter, repository
+
+appdoctor-ai/…/com/appdoctor/ai/
+├── AppDoctorAiPlugin.kt               plugin runtime + AI Analysis tab surface
+├── AppDoctorAiPluginFactory.kt        ServiceLoader registration gate
+├── AiProvider.kt                      provider abstraction (openai/gemini/local/custom/3p)
+├── sanitize/                          report sanitizer pipeline + built-ins
+├── provider/                          built-in provider implementations
+├── engine/                            prompt/analyzer/cache/history/export + orchestration
+└── ui/                                AI tab UI (generate/refresh/history/copy/share/export)
 ```

@@ -12,7 +12,7 @@ class MyApp : Application() {
 }
 ```
 
-> Phase 7 complete. Built with Kotlin, Jetpack Compose and Clean Architecture.
+> Phase 8 complete. Built with Kotlin, Jetpack Compose and Clean Architecture.
 
 ---
 
@@ -33,6 +33,7 @@ class MyApp : Application() {
 | 🩺 | **AppDoctor Intelligence (Diagnostics)** | Optional pure-Kotlin rule engine (`appdoctor-diagnostics`) that consumes collector metrics, computes deterministic health scores, detects issues with confidence, and powers the Health tab. |
 | 🕒 | **Timeline Engine** | Optional observational event stream (`appdoctor-timeline`) that correlates collector and diagnostics activity into a chronological session timeline with filtering/search/export. |
 | 🧾 | **Session Reports** | Optional local report runtime (`appdoctor-session`) that aggregates metadata, timeline, diagnostics, health, collector summaries and analytics into JSON/Markdown/ZIP exports. |
+| 🤖 | **AI Analysis** | Optional `appdoctor-ai` module that consumes **only `SessionReport`**, applies sanitization/redaction hooks, supports multiple providers (`openai`/`gemini`/`local`/`custom`), and renders an AI Analysis tab with history/cache/export. |
 | 🔌 | **Programmatic control** | `enable()`, `disable()`, `isEnabled()`. |
 | 🚫 | **Release‑safe** | Complete **no‑op** in non‑debuggable builds — no lifecycle callbacks, monitors, or overlay are ever created. |
 
@@ -99,6 +100,7 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and the ful
 | **`appdoctor-diagnostics`** | Android library | Optional diagnostics runtime: deterministic issue/rule engine, confidence, lifecycle, recommendations, health scoring. | ❌ |
 | **`appdoctor-timeline`** | Android library | Optional observational timeline runtime: event capture, grouping, filtering/search, JSON/Markdown export. | ❌ |
 | **`appdoctor-session`** | Android library | Optional local session report runtime: aggregation + export (`JSON`/`Markdown`/`ZIP`) + bounded report storage. | ❌ |
+| **`appdoctor-ai`** | Android library | Optional AI analysis runtime: `SessionReport`-only input, sanitization pipeline, provider abstraction, cache/history/export, AI dashboard tab. | ✅ |
 | **`sample-app`** | Android app | Demonstrates the one‑line integration. | ✅ |
 
 ---
@@ -117,6 +119,7 @@ dependencies {
     debugImplementation(project(":appdoctor-diagnostics")) // Optional diagnostics intelligence + Health tab data
     debugImplementation(project(":appdoctor-timeline")) // Optional timeline engine + Timeline tab data
     debugImplementation(project(":appdoctor-session")) // Optional local session report generation/export
+    debugImplementation(project(":appdoctor-ai")) // Optional AI analysis over SessionReport (manual trigger only)
 }
 ```
 
@@ -191,6 +194,9 @@ Session reports are disabled by default; enable with
 `AppDoctorConfig(enableSessionReports = true)`. See
 [`docs/SESSION_REPORTS.md`](docs/SESSION_REPORTS.md).
 
+AI analysis is disabled by default; enable with `AppDoctorConfig(enableAi = true)` and keep
+`aiProvider` unset to run in offline/local configuration mode. See [`docs/AI.md`](docs/AI.md).
+
 ### Configuration (optional)
 
 ```kotlin
@@ -222,6 +228,16 @@ AppDoctor.install(
         enableSessionReports = false,    // opt in to local session reports
         maximumStoredReports = 10,       // bounded in-memory stored report history
         autoGenerateOnCrash = false,     // placeholder (no crash auto-generation yet)
+        enableAi = false,                // opt in to AI module (tab + runtime)
+        aiProvider = null,               // "openai" | "gemini" | "local" | "custom"
+        aiApiKey = null,                 // optional; not required for local provider
+        aiBaseUrl = null,                // optional endpoint override
+        aiModel = null,                  // optional model override
+        aiTemperature = 0.2,             // provider temperature
+        aiTimeoutMillis = 20_000L,       // provider timeout
+        aiCacheEnabled = true,           // cache analyses by session id
+        aiCacheSize = 20,                // max cached/history analyses
+        aiLocalOnly = false,             // block external providers when true
     ),
 )
 ```

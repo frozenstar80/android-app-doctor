@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.appdoctor.ai.AiConfigurationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-07-19T05:46:10.192Z" hostname="Mac.lan" time="0.018">
+  <properties/>
+  <testcase name="maps additive core config to ai configuration" classname="com.appdoctor.ai.AiConfigurationTest" time="0.014"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

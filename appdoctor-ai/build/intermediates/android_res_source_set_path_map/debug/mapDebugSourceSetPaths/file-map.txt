@@ -1,0 +1,9 @@
+com.appdoctor.ai.appdoctor-ai-pngs-0 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/build/generated/res/pngs/debug
+com.appdoctor.ai.appdoctor-ai-updated_navigation_xml-1 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/build/generated/updated_navigation_xml/debug
+com.appdoctor.ai.appdoctor-ai-mergeDebugResources-2 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
+com.appdoctor.ai.appdoctor-ai-mergeDebugResources-3 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+com.appdoctor.ai.appdoctor-ai-debug-4 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/build/intermediates/merged_res/debug/mergeDebugResources
+com.appdoctor.ai.appdoctor-ai-debug-5 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/build/intermediates/packaged_res/debug/packageDebugResources
+com.appdoctor.ai.appdoctor-ai-debug-6 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/src/debug/res
+com.appdoctor.ai.appdoctor-ai-main-7 /Users/tanmaysingh/AndroidStudioProjects/AppDoctor/appdoctor-ai/src/main/res
+gradleHome-0 /Users/tanmaysingh/.gradle
