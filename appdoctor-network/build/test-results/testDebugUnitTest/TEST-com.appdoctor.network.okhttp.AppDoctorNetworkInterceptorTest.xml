@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-18T18:45:33.706Z" hostname="Mac.lan" time="0.175">
+<testsuite name="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-18T19:36:10.475Z" hostname="Mac.lan" time="0.484">
   <properties/>
-  <testcase name="respects max body capture bytes" classname="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" time="0.167"/>
-  <testcase name="captures failures" classname="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" time="0.003"/>
-  <testcase name="captures request and response details" classname="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" time="0.004"/>
+  <testcase name="respects max body capture bytes" classname="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" time="0.471"/>
+  <testcase name="captures failures" classname="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" time="0.005"/>
+  <testcase name="captures request and response details" classname="com.appdoctor.network.okhttp.AppDoctorNetworkInterceptorTest" time="0.008"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

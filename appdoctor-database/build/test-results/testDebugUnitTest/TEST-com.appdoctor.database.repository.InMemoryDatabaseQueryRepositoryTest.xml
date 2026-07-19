@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-18T18:44:03.601Z" hostname="Mac.lan" time="0.01">
+<testsuite name="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-18T19:36:13.111Z" hostname="Mac.lan" time="0.021">
   <properties/>
-  <testcase name="clear empties the store" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.002"/>
+  <testcase name="clear empties the store" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.005"/>
   <testcase name="keeps only latest max queries newest first" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.0"/>
-  <testcase name="supports concurrent writers safely" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.008"/>
+  <testcase name="supports concurrent writers safely" classname="com.appdoctor.database.repository.InMemoryDatabaseQueryRepositoryTest" time="0.016"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

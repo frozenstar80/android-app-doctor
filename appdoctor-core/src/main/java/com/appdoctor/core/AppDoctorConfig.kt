@@ -36,6 +36,17 @@ import com.appdoctor.core.plugin.AppDoctorPlugin
  * @property enableDatabaseAnalytics whether the database inspector continuously computes
  *   aggregated runtime statistics. Off by default — when disabled only query history is
  *   collected.
+ * @property captureCompose enables automatic installation of built-in Compose runtime
+ *   inspection plugins found on the classpath (currently `appdoctor-compose`). The always-on
+ *   runtime metrics are idle-cost-zero (only sampled while the dashboard observes them).
+ * @property enableComposeAnalytics whether the Compose inspector continuously computes
+ *   aggregated runtime statistics. Off by default — when disabled only live metrics and
+ *   (optionally) tracked composables are collected.
+ * @property enableComposableTracking whether individual composables that opt in via
+ *   `TrackRecompositions(...)` are recorded (name, recomposition count, lifetime, …). Off by
+ *   default; global runtime metrics do not require it.
+ * @property trackedComposableLimit max number of distinct tracked composables retained
+ *   in-memory by the Compose inspector when [enableComposableTracking] is on.
  */
 public data class AppDoctorConfig(
     public val startEnabled: Boolean = true,
@@ -52,6 +63,10 @@ public data class AppDoctorConfig(
     public val maxDatabaseQueries: Int = DEFAULT_MAX_DATABASE_QUERIES,
     public val slowQueryThresholdMillis: Long = DEFAULT_SLOW_QUERY_THRESHOLD_MS,
     public val enableDatabaseAnalytics: Boolean = false,
+    public val captureCompose: Boolean = true,
+    public val enableComposeAnalytics: Boolean = false,
+    public val enableComposableTracking: Boolean = false,
+    public val trackedComposableLimit: Int = DEFAULT_TRACKED_COMPOSABLE_LIMIT,
 ) {
     public companion object {
         /** Default sample interval (1s) for memory & CPU monitors. */
@@ -64,5 +79,7 @@ public data class AppDoctorConfig(
         public const val DEFAULT_MAX_DATABASE_QUERIES: Int = 100
         /** Default slow-query threshold (~one dropped frame). */
         public const val DEFAULT_SLOW_QUERY_THRESHOLD_MS: Long = 16L
+        /** Default number of retained tracked composables. */
+        public const val DEFAULT_TRACKED_COMPOSABLE_LIMIT: Int = 200
     }
 }

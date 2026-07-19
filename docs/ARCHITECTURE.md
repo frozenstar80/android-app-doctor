@@ -30,20 +30,21 @@ are, and where future features plug in. It complements the high‑level overview
                 │ (all variants)                 │ (debug only)
                 ▼                                 ▼
 ┌───────────────────────────────┐   ┌────────────────────────────────────┐
-│ appdoctor-core  (library)     │   │ appdoctor-ui / -network / -database │
-│  • AppDoctor (facade)         │   │  • Compose overlay + dashboard      │
-│  • AppDoctorEngine            │◀──┤  • Network tab plugin + interceptor │
-│  • ActivityTracker            │   │  • Database tab plugin + SQLite wrap │
-│  • OverlayCoordinator         │   │  • Material3 plugin tab rendering   │
-│  • Monitors (mem/cpu/fps)     │   │                                      │
-│  • MetricsProvider            │──▶│  (reads metrics & plugin data)      │
-│  • Ports + Plugin SPI         │   │                                      │
+│ appdoctor-core  (library)     │   │ appdoctor-ui / -network / -database  │
+│  • AppDoctor (facade)         │   │                  / -compose          │
+│  • AppDoctorEngine            │◀──┤  • Compose overlay + dashboard      │
+│  • ActivityTracker            │   │  • Network tab plugin + interceptor │
+│  • OverlayCoordinator         │   │  • Database tab plugin + SQLite wrap │
+│  • Monitors (mem/cpu/fps)     │   │  • Compose tab plugin + runtime probes │
+│  • MetricsProvider            │──▶│  • Material3 plugin tab rendering   │
+│  • Ports + Plugin SPI         │   │  (reads metrics & plugin data)      │
 │  NO Compose, NO UI            │   │                                      │
 └───────────────────────────────┘   └────────────────────────────────────┘
 ```
 
-Both `appdoctor-network` and `appdoctor-database` are debug-only collector modules
-discovered via `ServiceLoader`; neither requires any `appdoctor-core` change.
+The `appdoctor-network`, `appdoctor-database` and `appdoctor-compose` modules are all
+debug-only collector modules discovered via `ServiceLoader`; none requires any
+`appdoctor-core` change.
 
 - **`appdoctor-core`** compiles with `explicitApi()` and depends only on `kotlinx‑coroutines`
   and `androidx.core`. It never references Compose or any concrete UI.
@@ -183,7 +184,10 @@ modifying core:
 - 🗄️ **Database Inspector** — delivered in `appdoctor-database`: runtime SQL metrics via a
   delegating `SupportSQLiteOpenHelper.Factory` (Room `enableAppDoctor()`), a bounded query
   store, an optional decoupled analytics engine, and a Database tab.
-- 🧬 **Compose Inspector** — a plugin surfacing recomposition counts.
+- 🧬 **Compose Inspector** — delivered in `appdoctor-compose`: stable-API runtime metrics
+  (`Recomposer.runningRecomposers` + `Choreographer`), opt-in per-composable tracking via a
+  process-wide sink, an optional decoupled analytics engine, and a Compose tab. No experimental
+  Compose APIs and no reflection into Compose internals.
 - 🧩 **Plugin System** — third‑party plugins discovered via the same SPI (and, later,
   `ServiceLoader`/manifest metadata) so they need no core changes at all.
 
@@ -215,10 +219,10 @@ interface CollectorRegistry {                       // read-only: enumerate + lo
   `AppDoctorEngine` registers them automatically on install (Interface Segregation — a
   tab-only plugin need not implement it).
 - Access the read-only registry via `AppDoctor.collectors`. Stable ids: `memory`, `cpu`,
-  `fps`, `network`, `database`.
+  `fps`, `network`, `database`, `compose`.
 - Discovery is `java.util.ServiceLoader`-based: modules self-register an `OverlayFactory`
   and/or an `AppDoctorPluginFactory` under `META-INF/services`, so core needs **no edits**
-  when a new collector module (the Phase 3 Database module, a future Compose module) is
+  when a new collector module (the Phase 3 Database module, the Phase 4 Compose module) is
   added. AGP merges the per-module service files, so multiple inspector modules coexist.
 
 `StateFlow` remains the primary live stream; `snapshot()` is the point-in-time read for
@@ -271,4 +275,16 @@ appdoctor-database/…/com/appdoctor/database/
 ├── analytics/                   pure Computer + live Engine (optional, decoupled)
 ├── model/                       DatabaseQuery, QueryType, DatabaseMetric
 └── ui/                          DatabaseTabScreen + analytics section
+
+appdoctor-compose/…/com/appdoctor/compose/
+├── AppDoctorComposePlugin.kt    plugin + tab registration surface
+├── AppDoctorCompose.kt          process-wide tracking sink + optional screen name
+├── Tracking.kt                  TrackRecompositions / TrackScreen / LocalComposeTrackingDepth
+├── internal/runtime/            Recomposer + Choreographer probes, engine, pure helpers
+├── tracking/                    bounded in-memory composable tracker
+├── metric/                      ComposeMetricCollector (adapter, no analytics)
+├── analytics/                   pure Computer + live Engine (optional, decoupled)
+├── model/                       ComposeRuntimeSnapshot, TrackedComposable
+├── internal/                    ComposeFormatter
+└── ui/                          ComposeTabScreen + analytics section + lightweight charts
 ```

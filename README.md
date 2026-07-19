@@ -1,7 +1,7 @@
 # 🩺 AppDoctor
 
 **A zero‑config, debug‑only diagnostics overlay for Android.**
-One line in your `Application` gives you a draggable floating button on every screen that opens a live dashboard of **device info, app info, memory, FPS, CPU, network requests and database queries** — and it compiles to **nothing** in release builds.
+One line in your `Application` gives you a draggable floating button on every screen that opens a live dashboard of **device info, app info, memory, FPS, CPU, network requests, database queries and Compose runtime** — and it compiles to **nothing** in release builds.
 
 ```kotlin
 class MyApp : Application() {
@@ -12,7 +12,7 @@ class MyApp : Application() {
 }
 ```
 
-> Phase 3 complete. Built with Kotlin, Jetpack Compose and Clean Architecture.
+> Phase 4 complete. Built with Kotlin, Jetpack Compose and Clean Architecture.
 
 ---
 
@@ -29,6 +29,7 @@ class MyApp : Application() {
 | ⚙️ | **CPU monitor** | Approximate process CPU %, sampled from `/proc/self/stat` every second. |
 | 🌐 | **Network Inspector** | OkHttp interceptor + dashboard tab with search/filter/sort, headers/body/timing details, copy/share/export actions. |
 | 🗄️ | **Database Inspector** | Runtime SQL metrics for Room/SQLite: query, type, duration, rows, success, thread, transaction — plus optional analytics. Dashboard tab with search/filter/sort + copy/export. |
+| 🧬 | **Compose Inspector** | Runtime Compose metrics via **stable** APIs: recompositions, rate, burst durations, composition/frame counts — plus opt-in per-composable tracking and optional analytics. Dashboard tab with lightweight charts. |
 | 🔌 | **Programmatic control** | `enable()`, `disable()`, `isEnabled()`. |
 | 🚫 | **Release‑safe** | Complete **no‑op** in non‑debuggable builds — no lifecycle callbacks, monitors, or overlay are ever created. |
 
@@ -91,6 +92,7 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for a deeper dive and the ful
 | **`appdoctor-ui`** | Android library | Floating button overlay + Compose dashboard. Implements the core ports. | ✅ |
 | **`appdoctor-network`** | Android library | OkHttp interception, bounded request store, and Network dashboard tab plugin. | ✅ |
 | **`appdoctor-database`** | Android library | SupportSQLite/Room query instrumentation, bounded query store, optional analytics, and Database dashboard tab plugin. | ✅ |
+| **`appdoctor-compose`** | Android library | Stable-API Compose runtime metrics (recomposer + Choreographer), opt-in per-composable tracking, optional analytics, and Compose dashboard tab plugin. | ✅ |
 | **`sample-app`** | Android app | Demonstrates the one‑line integration. | ✅ |
 
 ---
@@ -105,6 +107,7 @@ dependencies {
     debugImplementation(project(":appdoctor-ui"))  // Compose overlay, debug builds only
     debugImplementation(project(":appdoctor-network")) // Network inspector plugin + UI tab
     debugImplementation(project(":appdoctor-database")) // Database inspector plugin + UI tab
+    debugImplementation(project(":appdoctor-compose")) // Compose runtime inspector plugin + UI tab
 }
 ```
 
@@ -158,6 +161,23 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
 
 Opt into runtime analytics with `AppDoctorConfig(enableDatabaseAnalytics = true)`. See [`docs/DATABASE.md`](docs/DATABASE.md).
 
+### Compose runtime inspection
+
+`appdoctor-compose` auto-registers `AppDoctorComposePlugin` when present on the classpath (unless `captureCompose = false`).
+Global runtime metrics (recompositions, rate, burst durations, composition/frame counts) appear under the **Compose** tab with **no code changes** — they are read entirely from **stable, public** Compose APIs (`Recomposer.runningRecomposers` + `Choreographer`).
+
+To observe individual composables, opt in with `AppDoctorConfig(enableComposableTracking = true)` and drop a call inside the composable you want to watch:
+
+```kotlin
+@Composable
+fun ProductCard(product: Product) {
+    TrackRecompositions("ProductCard") // no-op unless tracking is enabled
+    // …your UI…
+}
+```
+
+Opt into aggregate analytics with `AppDoctorConfig(enableComposeAnalytics = true)`. See [`docs/COMPOSE.md`](docs/COMPOSE.md).
+
 ### Configuration (optional)
 
 ```kotlin
@@ -175,6 +195,10 @@ AppDoctor.install(
         maxDatabaseQueries = 100,        // bounded query history
         slowQueryThresholdMillis = 16L,  // "slow" query threshold (≈ one frame)
         enableDatabaseAnalytics = false, // opt in to runtime analytics
+        captureCompose = true,           // install the Compose inspector
+        enableComposableTracking = false, // opt in to per-composable tracking
+        trackedComposableLimit = 200,    // bounded tracked-composable history
+        enableComposeAnalytics = false,  // opt in to Compose analytics
     ),
 )
 ```
@@ -238,7 +262,6 @@ AppDoctor.registerPlugin(NetworkInspectorPlugin())
 
 Planned extension points on the roadmap:
 
-- 🧬 **Compose Inspector** — recomposition counts and layout insights.
 - 🧩 **Plugin System** — third‑party tabs discovered via the same SPI.
 
 ---
@@ -276,8 +299,8 @@ The [`sample-app`](sample-app) module demonstrates the full integration:
 - [x] **Phase 1 — MVP:** floating button, dashboard, device/app/memory/FPS/CPU, plugin SPI.
 - [x] **Phase 2:** Network Inspector ✅.
 - [x] **Phase 3:** Database (Room) runtime inspector ✅ — SQL metrics + optional analytics.
-- [ ] **Phase 4:** Compose Inspector, crash/ANR capture, log viewer.
-- [ ] **Phase 5:** public plugin system + Maven Central publishing.
+- [x] **Phase 4:** Compose runtime inspector ✅ — recomposition/frame metrics, opt-in tracking + optional analytics.
+- [ ] **Phase 5:** crash/ANR capture, log viewer, public plugin system + Maven Central publishing.
 
 ---
 
